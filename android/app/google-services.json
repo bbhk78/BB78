@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "698675560390",
+    "firebase_url": "https://boysbrigade78-mh.firebaseio.com",
+    "project_id": "boysbrigade78-mh",
+    "storage_bucket": "boysbrigade78-mh.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698675560390:android:78358d9f5891badcfa7cc7",
+        "android_client_info": {
+          "package_name": "hk.com.boysbrigade.bb78"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "698675560390-rjagl9efl60dm2jfqg2tn66fql2l6u8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpW9ydQ0UKhh9J655UWrYbnSvc3UrbT6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "698675560390-rjagl9efl60dm2jfqg2tn66fql2l6u8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698675560390:android:7c8236a724052a1ffa7cc7",
+        "android_client_info": {
+          "package_name": "hk.com.boysbrigade78"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "698675560390-rjagl9efl60dm2jfqg2tn66fql2l6u8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpW9ydQ0UKhh9J655UWrYbnSvc3UrbT6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "698675560390-rjagl9efl60dm2jfqg2tn66fql2l6u8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
