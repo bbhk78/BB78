@@ -3,6 +3,7 @@ import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/teacher_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
+import 'package:boysbrigade/pages/group_perf.dart';
 import 'package:boysbrigade/pages/sub_groups_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,7 +48,7 @@ class GroupsView extends GetWidget<AuthController> {
                   group: currGroup,
                   tileColor: currTileColor,
                   numStudents: numStudents,
-                  showSubGroupsView: true,
+                  showSubGroupsView: !teacherCtrl.teacher!.admin,
                 );
               },
             )
@@ -76,7 +77,7 @@ class GroupCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => InkWell(
     child: Container(
-      padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -109,6 +110,14 @@ class GroupCardWidget extends StatelessWidget {
         color: tileColor,
       ),
     ),
-    onTap: () => Get.to<void>(() => SubGroupsView(group)),
+    onTap: () => Get.to<void>(
+      () => showSubGroupsView ? SubGroupsView(
+        group: group,
+        tileColor: tileColor
+      ) : GroupPerformance(
+        group: group,
+        tileColor: tileColor,
+      )
+    ),
   );
 }

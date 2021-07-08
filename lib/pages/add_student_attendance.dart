@@ -50,71 +50,54 @@ class AddStudentAttendance extends GetWidget<AuthController> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Center(
-                child: Text(
-                  currGroup.name,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
+        child: ListView.builder(
+          padding: const EdgeInsets.only(bottom: 10),
+          shrinkWrap: true,
+          itemCount: teacherCtrl.subgroups.length,
+          itemBuilder: (BuildContext context, int subgroupIndex) {
+            final SubGroup currSubGroup = teacherCtrl.subgroups[subgroupIndex];
+            final List<Student> subGroupStudents = todayRollcall.keys.where(
+              (Student student) => currSubGroup.studentIds.contains(student.id)
+            ).toList();
+
+            return ListView(
+              padding: const EdgeInsets.only(bottom: 10),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    currSubGroup.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              ListView.builder(
-                padding: const EdgeInsets.only(bottom: 10),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: teacherCtrl.subgroups.length,
-                itemBuilder: (BuildContext context, int subgroupIndex) {
-                  final SubGroup currSubGroup = teacherCtrl.subgroups[subgroupIndex];
-                  final List<Student> subGroupStudents = todayRollcall.keys.where(
-                    (Student student) => currSubGroup.studentIds.contains(student.id)
-                  ).toList();
+                const Divider(thickness: 0.5),
+                ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: subGroupStudents.length,
+                  itemBuilder: (BuildContext context, int studentIndex) {
+                    final Student currStudent = subGroupStudents[studentIndex];
+                    final StudentAttendanceDay currDay = todayRollcall.entries.firstWhere(
+                      (MapEntry<Student, StudentAttendanceDay> entry) => entry.key.id == currStudent.id
+                    ).value;
 
-                  return ListView(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          currSubGroup.name,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const Divider(thickness: 0.5),
-                      ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: subGroupStudents.length,
-                        itemBuilder: (BuildContext context, int studentIndex) {
-                          final Student currStudent = subGroupStudents[studentIndex];
-                          final StudentAttendanceDay currDay = todayRollcall.entries.firstWhere(
-                            (MapEntry<Student, StudentAttendanceDay> entry) => entry.key.id == currStudent.id
-                          ).value;
-
-                          return StudentAttendanceRowWidget(
-                            group: currGroup,
-                            subgroup: currSubGroup,
-                            student: currStudent,
-                            day: currDay
-                          );
-                        },
-                      ),
-                    ]
-                  );
-                },
-              ),
-            ],
-          ),
+                    return StudentAttendanceRowWidget(
+                      group: currGroup,
+                      subgroup: currSubGroup,
+                      student: currStudent,
+                      day: currDay
+                    );
+                  },
+                ),
+              ]
+            );
+          },
         ),
       ),
       bottomNavigationBar: Container(

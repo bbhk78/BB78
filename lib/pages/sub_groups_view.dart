@@ -12,7 +12,13 @@ import 'package:boysbrigade/pages/sub_group_perf.dart';
 
 class SubGroupsView extends GetWidget<AuthController> {
   final Group group;
-  const SubGroupsView(this.group, { Key? key }) : super(key: key);
+  final Color tileColor;
+
+  const SubGroupsView({
+    Key? key,
+    required this.group,
+    required this.tileColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +50,6 @@ class SubGroupsView extends GetWidget<AuthController> {
               ),
               itemBuilder: (BuildContext context, int index) {
                 final SubGroup currSubGroup = filteredSubGroups[index];
-                final Color currTileColor = HALF_YEAR_TILE_COLORS[index % HALF_YEAR_TILE_COLORS.length];
                 final int numStudents = teacherCtrl.students
                   .where((Student student) => student.subgroupId == currSubGroup.id)
                   .length;
@@ -52,7 +57,7 @@ class SubGroupsView extends GetWidget<AuthController> {
                 return SubGroupCardWidget(
                   group: group,
                   subgroup: currSubGroup,
-                  tileColor: currTileColor,
+                  tileColor: tileColor,
                   numStudents: numStudents
                 );
               },

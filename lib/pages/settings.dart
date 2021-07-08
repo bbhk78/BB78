@@ -129,7 +129,6 @@ class About extends StatelessWidget {
       iconTheme: const IconThemeData(color: Colors.black),
       elevation: 0,
       centerTitle: true,
-      backgroundColor: Colors.white,
       title: Text(
         'about'.tr,
         style: const TextStyle(

@@ -67,27 +67,27 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
               ).value;
 
               return ListView(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
-                        currGroup.name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                padding: const EdgeInsets.only(bottom: 10),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      currGroup.name,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const Divider(thickness: 0.5),
-                    TeacherAttendanceRowWidget(
-                      group: currGroup,
-                      teacher: currTeacher,
-                      day: currDay
-                    ),
-                  ]
+                  ),
+                  const Divider(thickness: 0.5),
+                  TeacherAttendanceRowWidget(
+                    group: currGroup,
+                    teacher: currTeacher,
+                    day: currDay
+                  ),
+                ]
               );
             },
           ),

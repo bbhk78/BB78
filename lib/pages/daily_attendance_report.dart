@@ -6,6 +6,7 @@ import 'package:boysbrigade/controller/teacher_ctrl.dart';
 import 'package:boysbrigade/model/student_attendance.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
+import 'package:boysbrigade/model/subgroup.dart';
 import 'package:boysbrigade/model/teacher.dart';
 import 'package:boysbrigade/model/teacher_attendance.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
@@ -23,6 +24,7 @@ class DailyAttendanceReport extends GetWidget<AuthController> {
     final TeacherController teacherCtrl = Get.find<TeacherController>();
 
     final List<Group> groups = teacherCtrl.groups;
+    final List<SubGroup> subgroups = teacherCtrl.subgroups;
     final List<Student> students = teacherCtrl.students;
     final List<Teacher> teachers = groupsCtrl.teachers;
 
@@ -36,17 +38,42 @@ class DailyAttendanceReport extends GetWidget<AuthController> {
       ),
     )).toList();
     
-    final List<Widget> tabViews = groups.map((Group group) {
-      final List<Student> groupStudents = students
-        .where((Student student) => student.groupId == group.id)
-        .toList();
-
-      return Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 10
-        ),
-        child: StudentGroupReportWidget(students: groupStudents),
+    final List<Widget> tabViews = groups.map<Widget>((Group group) {
+      final List<SubGroup> currSubGroups = subgroups.where(
+        (SubGroup subgroup) => group.subGroupIds.contains(subgroup.id)
+      ).toList();
+      
+      return ListView.builder(
+        padding: const EdgeInsets.only(top: 10),
+        shrinkWrap: true,
+        itemCount: currSubGroups.length,
+        itemBuilder: (BuildContext context, int subGroupIndex) {
+          final SubGroup subgroup = currSubGroups[subGroupIndex];
+          final List<Student> subGroupStudents = students
+            .where((Student student) => student.subgroupId == subgroup.id)
+            .toList();
+          
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                subgroup.name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'OpenSans Regular'
+                ),
+              ),
+              const Divider(thickness: 0.5),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10
+                ),
+                child: StudentGroupReportWidget(students: subGroupStudents),
+              ),
+            ],
+          );
+        }
       );
     }).toList();
 
@@ -67,7 +94,10 @@ class DailyAttendanceReport extends GetWidget<AuthController> {
           horizontal: 20,
           vertical: 10
         ),
-        child: TeacherGroupReportWidget(teachers: teachers),
+        child: TeacherGroupReportWidget(
+          groups: groups,
+          teachers: teachers
+        ),
       );
 
       tabViews.add(teacherView);
@@ -220,11 +250,13 @@ class StudentAttendanceRowWidget extends StatelessWidget {
 
 class TeacherGroupReportWidget extends StatelessWidget {
   final List<Teacher> teachers;
+  final List<Group> groups;
   final int _teachersWithDays;
 
   TeacherGroupReportWidget({
     Key? key,
     required this.teachers,
+    required this.groups,
   }) : _teachersWithDays = teachers
         .map((Teacher teacher) => teacher.todayAttendance)
         .where((TeacherAttendanceDay? day) => day != null)
@@ -235,14 +267,12 @@ class TeacherGroupReportWidget extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       if (teachers.length != _teachersWithDays)
-        Center(
-          child: Text(
-            'not available'.tr,
-            // TODO: Make the text vertically center on the page
-            style: const TextStyle(
-              fontSize: 20,
-              fontFamily: 'OpenSans SemiBold',
-            )
+        Text(
+          'not available'.tr,
+          // TODO: Make the text vertically center on the page
+          style: const TextStyle(
+            fontSize: 20,
+            fontFamily: 'OpenSans SemiBold',
           )
         )
       else
@@ -253,9 +283,13 @@ class TeacherGroupReportWidget extends StatelessWidget {
           itemCount: teachers.length,
           itemBuilder: (BuildContext context, int teacherIndex) {
             final Teacher currTeacher = teachers[teacherIndex];
+            final Group currGroup = groups.firstWhere(
+              (Group group) => currTeacher.groupId == group.id
+            );
             final TeacherAttendanceDay currDay = currTeacher.todayAttendance!;
 
             return TeacherAttendanceRowWidget(
+              group: currGroup,
               teacher: currTeacher,
               day: currDay
             );
@@ -267,11 +301,13 @@ class TeacherGroupReportWidget extends StatelessWidget {
 
 
 class TeacherAttendanceRowWidget extends StatelessWidget {
+  final Group group;
   final Teacher teacher;
   final TeacherAttendanceDay day;
 
   const TeacherAttendanceRowWidget({
     Key? key,
+    required this.group,
     required this.teacher,
     required this.day
   }) : super(key: key);
@@ -286,11 +322,23 @@ class TeacherAttendanceRowWidget extends StatelessWidget {
           fit: FlexFit.tight,
           child: Padding(
             padding: const EdgeInsets.all(10),
-            child: Text(
-              teacher.name,
+            child: Text.rich(TextSpan(
               style: const TextStyle(fontSize: 18),
-              textAlign: TextAlign.start,
-            ),
+              children: <TextSpan>[
+                TextSpan(text: teacher.name),
+                const TextSpan(text: ' ('),
+                TextSpan(
+                  text: group.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold)
+                ),
+                const TextSpan(text: ')'),
+              ],
+            ))
+            // Text(
+            //   '${teacher.name} (${group.name})',
+            //   style: const TextStyle(fontSize: 18),
+            //   textAlign: TextAlign.start,
+            // ),
           ),
         ),
         Flexible(
