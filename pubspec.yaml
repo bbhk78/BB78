@@ -25,6 +25,8 @@ dependencies:
   flutter:
     sdk: flutter
   cloud_firestore: ^2.3.0
+  contained_tab_bar_view: ^0.8.0
+  container_tab_indicator: ^0.3.0
   cupertino_icons: ^1.0.3
   equatable: ^2.0.3
   firebase_auth: ^2.0.0

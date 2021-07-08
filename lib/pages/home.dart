@@ -1,8 +1,9 @@
 import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/teacher_ctrl.dart';
-import 'package:boysbrigade/pages/attendance.dart';
-import 'package:boysbrigade/pages/day.dart';
-import 'package:boysbrigade/pages/half_year.dart';
+import 'package:boysbrigade/pages/add_student_attendance.dart';
+import 'package:boysbrigade/pages/add_teacher_attendance.dart';
+import 'package:boysbrigade/pages/daily_attendance_report.dart';
+import 'package:boysbrigade/pages/groups_view.dart';
 import 'package:boysbrigade/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,8 +11,8 @@ import 'package:get/get_core/src/get_main.dart';
 
 Widget showTab(int index) {
   switch (index) {
-    case 0: return const HalfYear();
-    case 1: return const Day();
+    case 0: return const GroupsView();
+    case 1: return const DailyAttendanceReport();
     case 2: return const Settings();
     default: throw Exception('Invalid index provided for bottom tab navigation: $index');
   }
@@ -57,22 +58,25 @@ class Home extends GetWidget<AuthController> {
           ),
         ],
       ),
-      floatingActionButton: (selectedTab.value == 0 && !teacherCtrl.teacher!.admin)
-        ? const AddAttendanceFab()
-        : null,
+      floatingActionButton: selectedTab.value == 0
+        ? AddAttendanceFab(teacherCtrl.teacher!.admin)
+        : null
     ));
   }
 }
 
 class AddAttendanceFab extends StatelessWidget {
-  const AddAttendanceFab({ Key? key }) : super(key: key);
+  final bool isAdmin;
+  const AddAttendanceFab(this.isAdmin, { Key? key }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => SizedBox(
     height: 75,
     width: 75,
     child: FloatingActionButton(
-      onPressed: () => Get.to<void>(() => const AddAttendance()),
+      onPressed: () => Get.to<void>(
+        () => isAdmin ? const AddTeacherAttendance() : const AddStudentAttendance()
+      ),
       child: const Icon(Icons.add_rounded, size: 50),
       backgroundColor: Colors.black,
       elevation: 0,

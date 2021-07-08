@@ -45,17 +45,18 @@ class LocaleBundle extends Equatable {
 }
 
 class GuiUtils {
-  static PreferredSize simpleAppBar(
-          {String title = '',
-          String subtitle = '',
-          bool showBackButton = false}) =>
+  static PreferredSize simpleAppBar({
+    String title = '',
+    String subtitle = '',
+    bool showBackButton = false
+  }) =>
       PreferredSize(
-        preferredSize: const Size.fromHeight(130),
+        preferredSize: const Size.fromHeight(110),
         child: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
           flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 70, left: 40),
+            padding: const EdgeInsets.only(top: 60, left: 40),
             child: Row(
               children: <Widget>[
                 if (showBackButton)
@@ -69,16 +70,19 @@ class GuiUtils {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title,
-                        style: const TextStyle(
-                            fontSize: 25,
-                            fontFamily: 'OpenSans SemiBold',
-                            color: Colors.black)),
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontFamily: 'OpenSans SemiBold',
+                        color: Colors.black)
+                      ),
                     if (subtitle.isNotEmpty)
                       Text(subtitle,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'OpenSans SemiBold',
-                              color: Colors.black)),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'OpenSans SemiBold',
+                          color: Colors.black
+                        )
+                      ),
                   ],
                 ),
               ],

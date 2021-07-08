@@ -9,12 +9,16 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-class GroupPerformance extends GetWidget<AuthController> {
+class SubGroupPerformance extends GetWidget<AuthController> {
   final Group group;
+  final SubGroup subgroup;
+  final Color tileColor;
 
-  const GroupPerformance({
-    Key? key,
+  const SubGroupPerformance({
     required this.group,
+    required this.subgroup,
+    required this.tileColor,
+    Key? key
   }) : super(key: key);
 
   @override
@@ -26,7 +30,6 @@ class GroupPerformance extends GetWidget<AuthController> {
       .toList();
 
     return Scaffold(
-      // backgroundColor: Colors.white,
       appBar: GuiUtils.simpleAppBar(
         title: group.name,
         subtitle: subgroup.name,
@@ -49,3 +52,5 @@ class GroupPerformance extends GetWidget<AuthController> {
     );
   }
 }
+
+

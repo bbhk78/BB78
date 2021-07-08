@@ -5,7 +5,8 @@ import 'package:boysbrigade/controller/teacher_ctrl.dart';
 import 'package:boysbrigade/model/student_attendance.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
-import 'package:boysbrigade/pages/uniform.dart';
+import 'package:boysbrigade/model/subgroup.dart';
+import 'package:boysbrigade/pages/student_attendance_record.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
@@ -15,8 +16,8 @@ import 'package:boysbrigade/utils.dart';
 
 import 'package:boysbrigade/pages/home.dart';
 
-class AddAttendance extends GetWidget<AuthController> {
-  const AddAttendance({ Key? key }) : super(key: key);
+class AddStudentAttendance extends GetWidget<AuthController> {
+  const AddStudentAttendance({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,80 +49,114 @@ class AddAttendance extends GetWidget<AuthController> {
         showBackButton: true
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10),
+              Center(
                 child: Text(
                   currGroup.name,
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const Divider(),
               ListView.builder(
                 padding: const EdgeInsets.only(bottom: 10),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: todayRollcall.keys.length,
-                itemBuilder: (BuildContext context, int studentIndex) {
-                  final Student currStudent = todayRollcall.keys.elementAt(studentIndex);
-                  final StudentAttendanceDay currDay = todayRollcall.values.elementAt(studentIndex);
+                itemCount: teacherCtrl.subgroups.length,
+                itemBuilder: (BuildContext context, int subgroupIndex) {
+                  final SubGroup currSubGroup = teacherCtrl.subgroups[subgroupIndex];
+                  final List<Student> subGroupStudents = todayRollcall.keys.where(
+                    (Student student) => currSubGroup.studentIds.contains(student.id)
+                  ).toList();
 
-                  return StudentAttendanceRowWidget(
-                    group: currGroup,
-                    student: currStudent,
-                    day: currDay
+                  return ListView(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          currSubGroup.name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const Divider(thickness: 0.5),
+                      ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: subGroupStudents.length,
+                        itemBuilder: (BuildContext context, int studentIndex) {
+                          final Student currStudent = subGroupStudents[studentIndex];
+                          final StudentAttendanceDay currDay = todayRollcall.entries.firstWhere(
+                            (MapEntry<Student, StudentAttendanceDay> entry) => entry.key.id == currStudent.id
+                          ).value;
+
+                          return StudentAttendanceRowWidget(
+                            group: currGroup,
+                            subgroup: currSubGroup,
+                            student: currStudent,
+                            day: currDay
+                          );
+                        },
+                      ),
+                    ]
                   );
                 },
-              ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                alignment: FractionalOffset.bottomCenter,
-                child: TextButton(
-                  // TODO: make button stick to the bottom
-                  onPressed: () async {
-                    final bool isValid = todayRollcall.values
-                      .where((StudentAttendanceDay day) => day.status == AttendanceStatus.unknown)
-                      .isEmpty;
-
-                    if (!isValid)
-                      await Get.defaultDialog<void>(
-                        middleText: 'need all attendance'.tr,
-                        radius: 0,
-                        textConfirm: 'ok'.tr,
-                        barrierDismissible: false,
-                        confirmTextColor: Colors.white,
-                        onConfirm: () => Get.back<void>()
-                      );
-                    else {
-                      await Get.dialog<void>(FutureProgressDialog(
-                        teacherCtrl.addTodaysAttendanceUpdate(todayRollcall),
-                        message: Text('saving data'.tr),
-                      ));
-
-                      await Get.offAll<void>(() => Home(startIndex: 1));
-                    }
-                  },
-                  child: Text(
-                    isUpdating ? 'update'.tr : 'submit'.tr,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'OpenSans SemiBold',
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
               ),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(10),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.grey.shade400,
+          ),
+          onPressed: () async {
+            final bool isValid = todayRollcall.values
+              .where((StudentAttendanceDay day) => day.status == AttendanceStatus.unknown)
+              .isEmpty;
+
+            if (!isValid)
+              await Get.defaultDialog<void>(
+                middleText: 'need all attendance'.tr,
+                radius: 0,
+                textConfirm: 'ok'.tr,
+                barrierDismissible: false,
+                confirmTextColor: Colors.black,
+                buttonColor: Colors.grey.shade300,
+                onConfirm: () => Get.back<void>()
+              );
+            else {
+              await Get.dialog<void>(FutureProgressDialog(
+                teacherCtrl.addStudentAttendanceUpdate(todayRollcall),
+                message: Text('saving data'.tr),
+              ));
+
+              await Get.offAll<void>(() => Home(startIndex: 1));
+            }
+          },
+          child: Text(
+            isUpdating ? 'update'.tr : 'submit'.tr,
+            style: const TextStyle(
+              fontSize: 20,
+              fontFamily: 'OpenSans SemiBold',
+              color: Colors.black,
+            ),
+          ),
+        ),
+      )
     );
   }
 }
@@ -129,12 +164,14 @@ class AddAttendance extends GetWidget<AuthController> {
 
 class StudentAttendanceRowWidget extends StatelessWidget {
   final Group group;
+  final SubGroup subgroup;
   final Student student;
   final Rx<StudentAttendanceDay> day;
 
   StudentAttendanceRowWidget({
     Key? key,
     required this.group,
+    required this.subgroup,
     required this.student,
     required StudentAttendanceDay day
   }) :
@@ -190,8 +227,9 @@ class StudentAttendanceRowWidget extends StatelessWidget {
             final StudentAttendanceDay? potentialDay =
             await Get.bottomSheet<StudentAttendanceDay>(
               Wrap(children: <Widget>[
-                Uniform(
+                StudentAttendanceRecord(
                   group: group,
+                  subgroup: subgroup,
                   student: student,
                   day: day.value
                 )

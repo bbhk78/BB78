@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/utils.dart';
-import 'package:equatable/equatable.dart';
 
 class StudentAttendanceDay {
   Timestamp date;

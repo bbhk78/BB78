@@ -7,6 +7,8 @@ import 'package:boysbrigade/controller/teacher_ctrl.dart';
 
 import 'package:boysbrigade/constants/langs.dart';
 
+import 'controller/subgroup_ctrl.dart';
+
 class GlobalBindings extends Bindings {
   @override
   void dependencies() {
@@ -18,6 +20,7 @@ class GlobalBindings extends Bindings {
       ), permanent: true)
       ..put<AuthController>(AuthController(), permanent: true)
       ..put<GroupsController>(GroupsController(), permanent: true)
+      ..put<SubGroupsController>(SubGroupsController(), permanent: true)
       ..put<TeacherController>(TeacherController(), permanent: true);
   }
 }

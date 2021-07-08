@@ -70,5 +70,5 @@ class Student extends Equatable {
       );
 
   @override
-  List<Object> get props => <Object>[id, groupId, name];
+  List<Object> get props => <Object>[id, groupId, subgroupId, name];
 }

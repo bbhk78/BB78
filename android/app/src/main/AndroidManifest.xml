@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hk.com.boysbrigade.bb78">
    <application
-        android:label="bb78"
+        android:label="BB78"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

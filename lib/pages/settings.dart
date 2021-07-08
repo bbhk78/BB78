@@ -89,15 +89,18 @@ class Settings extends GetWidget<AuthController> {
               ],
             ),
           ),
+          const Spacer(flex: 4),
           Expanded(
-            child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-                child: TextButton(
-                  onPressed: () async {
-                    await controller.signOut();
-                  },
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.grey.shade400,
+                ),
+                onPressed: () async {
+                  await controller.signOut();
+                },
+                child: Center(
                   child: Text(
                     'logout'.tr,
                     style: const TextStyle(
@@ -139,7 +142,7 @@ class About extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width * 1,
             child: Column(
               children: <Widget>[

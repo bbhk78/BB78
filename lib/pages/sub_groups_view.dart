@@ -3,25 +3,31 @@ import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/teacher_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
+import 'package:boysbrigade/model/subgroup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
-import 'package:boysbrigade/pages/group_perf.dart';
+import 'package:boysbrigade/pages/sub_group_perf.dart';
 
-class HalfYear extends GetWidget<AuthController> {
-  const HalfYear({ Key? key }) : super(key: key);
+class SubGroupsView extends GetWidget<AuthController> {
+  final Group group;
+  const SubGroupsView(this.group, { Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final TeacherController teacherCtrl = Get.find<TeacherController>();
+    final List<SubGroup> filteredSubGroups = teacherCtrl.subgroups.where(
+      (SubGroup subgroup) => subgroup.groupId == group.id
+    ).toList();
 
     return Scaffold(
       appBar: GuiUtils.simpleAppBar(
-        title: 'half year'.tr,
-        subtitle: DateTime.now().month < 7
-          ? 'first half year'.tr
-          : 'second half year'.tr
+        title: group.name,
+        subtitle: '# of students'.tr + teacherCtrl.students
+          .where((Student student) => student.groupId == group.id)
+          .length.toString(),
+        showBackButton: true
       ),
       body: Padding(
         padding: const EdgeInsets.all(30),
@@ -30,21 +36,22 @@ class HalfYear extends GetWidget<AuthController> {
           children: <Widget>[
             GridView.builder(
               shrinkWrap: true,
-              itemCount: teacherCtrl.groups.length,
+              itemCount: filteredSubGroups.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
                 crossAxisCount: 2,
               ),
               itemBuilder: (BuildContext context, int index) {
-                final Group currGroup = teacherCtrl.groups[index];
+                final SubGroup currSubGroup = filteredSubGroups[index];
                 final Color currTileColor = HALF_YEAR_TILE_COLORS[index % HALF_YEAR_TILE_COLORS.length];
                 final int numStudents = teacherCtrl.students
-                  .where((Student student) => student.groupId == currGroup.id)
+                  .where((Student student) => student.subgroupId == currSubGroup.id)
                   .length;
 
-                return GroupCardWidget(
-                  group: currGroup,
+                return SubGroupCardWidget(
+                  group: group,
+                  subgroup: currSubGroup,
                   tileColor: currTileColor,
                   numStudents: numStudents
                 );
@@ -58,16 +65,18 @@ class HalfYear extends GetWidget<AuthController> {
 }
 
 
-class GroupCardWidget extends StatelessWidget {
+class SubGroupCardWidget extends StatelessWidget {
   final Group group;
+  final SubGroup subgroup;
   final Color tileColor;
   final int numStudents;
 
-  const GroupCardWidget({
-    Key? key,
+  const SubGroupCardWidget({
     required this.group,
+    required this.subgroup,
     required this.tileColor,
-    required this.numStudents
+    required this.numStudents,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -78,7 +87,7 @@ class GroupCardWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            group.name,
+            subgroup.name,
             style: const TextStyle(
               color: Colors.black,
               fontSize: 30,
@@ -106,6 +115,12 @@ class GroupCardWidget extends StatelessWidget {
         color: tileColor,
       ),
     ),
-    onTap: () => Get.to<void>(() => GroupPerformance(group.id, tileColor)),
+    onTap: () => Get.to<void>(
+      () => SubGroupPerformance(
+        group: group,
+        subgroup: subgroup,
+        tileColor: tileColor
+      )
+    ),
   );
 }

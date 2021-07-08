@@ -4,8 +4,11 @@ import 'package:equatable/equatable.dart';
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/model/teacher_attendance.dart';
 
+import 'package:boysbrigade/utils.dart';
+
 class Teacher extends Equatable {
   final String id;
+  final String name;
   final String email;
   final String? groupId;
   final bool admin;
@@ -13,6 +16,7 @@ class Teacher extends Equatable {
 
   const Teacher({
     required this.id,
+    required this.name,
     required this.email,
     required this.groupId,
     required this.admin,
@@ -28,7 +32,16 @@ class Teacher extends Equatable {
     return (countedDays / totalDays) * 100;
   }
 
+  TeacherAttendanceDay? get todayAttendance {
+    final List<TeacherAttendanceDay> validDays = attendance.calendar.where(
+            (TeacherAttendanceDay day) => day.date.toDate().isToday()
+    ).toList();
+
+    return validDays.isEmpty ? null : validDays.first;
+  }
+
   Map<String, dynamic> toFirestore() => <String, dynamic>{
+    'name': name,
     'email': email,
     'group': groupId,
     'admin': admin,
@@ -37,6 +50,7 @@ class Teacher extends Equatable {
 
   Teacher.fromFirestore(DocumentSnapshot<Map<String, dynamic>> document)
     : id = document.id,
+      name = document.data()!['name'] as String,
       email = document.data()!['email'] as String,
       groupId = document.data()!['group'] as String?,
       admin = document.data()!['admin'] as bool,

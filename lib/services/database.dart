@@ -3,7 +3,6 @@ import 'package:boysbrigade/model/student.dart';
 import 'package:boysbrigade/model/subgroup.dart';
 import 'package:boysbrigade/model/teacher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 
 class Database {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -43,18 +42,7 @@ class Database {
   // START OF TEACHERS //
   ///////////////////////
 
-  static Future<bool> createTeacher(Teacher teacher) async {
-    try {
-      await _firestore.collection(TEACHERS_COLL)
-        .doc(teacher.id)
-        .set(teacher.toFirestore());
-      return true;
-    } on Exception catch (err) {
-      return false;
-    }
-  }
-
-  static Future<Teacher?> getTeacher(String email) async {
+  static Future<Teacher?> getTeacherByEmail(String email) async {
     final QuerySnapshot<Map<String, dynamic>> doc = await _firestore
       .collection(TEACHERS_COLL)
       .where('email', isEqualTo: email)
@@ -63,18 +51,34 @@ class Database {
     return doc.docs.isNotEmpty ? Teacher.fromFirestore(doc.docs.first) : null;
   }
 
-  static Future<void> changeTeacherGroup(String id, String newGroupId) async {
-    final List<Group> allGroups = await Database.groupsStream().first;
-    final bool groupExists = allGroups
-      .map((Group group) => group.id)
-      .contains(newGroupId);
+  static Future<Teacher?> getTeacherById(String id) async {
+    final QuerySnapshot<Map<String, dynamic>> doc = await _firestore
+        .collection(TEACHERS_COLL)
+        .where('id', isEqualTo: id)
+        .get();
 
-    if (groupExists) {
-      await _firestore.collection(TEACHERS_COLL)
-        .doc(id)
-        .update(<String, String>{'group': newGroupId});
-    } else
-      throw Exception('group not found'.tr);
+    return doc.docs.isNotEmpty ? Teacher.fromFirestore(doc.docs.first) : null;
+  }
+
+  static Future<List<Teacher>> getTeachersByIds(List<String> ids) async {
+    final QuerySnapshot<Map<String, dynamic>> qs = await _firestore
+        .collection(TEACHERS_COLL)
+        .where(FieldPath.documentId, whereIn: ids)
+        .get();
+
+    if (qs.docs.isEmpty)
+      return <Teacher>[];
+
+    return qs.docs.map<Teacher>(
+      (QueryDocumentSnapshot<Map<String, dynamic>> doc) => Teacher.fromFirestore(doc)
+    ).toList();
+  }
+
+  static Future<void> saveTeacher(Teacher teacher) async {
+    await _firestore
+        .collection(TEACHERS_COLL)
+        .doc(teacher.id)
+        .set(teacher.toFirestore());
   }
 
   ///////////////////////
@@ -94,11 +98,47 @@ class Database {
       );
   }
 
+  static Future<bool> createStudent(Student student) async {
+    try {
+      await _firestore.collection(STUDENTS_COLL)
+        .doc(student.id)
+        .set(student.toFirestore());
+      
+      await _firestore.collection(SUBGROUPS_COLL)
+        .doc(student.subgroupId)
+        .update(<String, Object>{
+          'students': FieldValue.arrayUnion(<String>[student.id])
+        });
+
+      return true;
+    } on Exception {
+      return false;
+    }
+  }
+
   static Future<void> saveStudent(Student student) async {
     await _firestore
       .collection(STUDENTS_COLL)
       .doc(student.id)
       .set(student.toFirestore());
+  }
+
+  static Future<bool> removeStudent(Student student) async {
+    try {
+      await _firestore.collection(STUDENTS_COLL)
+          .doc(student.id)
+          .delete();
+
+      await _firestore.collection(SUBGROUPS_COLL)
+          .doc(student.subgroupId)
+          .update(<String, Object>{
+            'students': FieldValue.arrayRemove(<String>[student.id])
+          });
+
+      return true;
+    } on Exception {
+      return false;
+    }
   }
 
   ///////////////////////
