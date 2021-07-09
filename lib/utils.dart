@@ -45,13 +45,12 @@ class LocaleBundle extends Equatable {
 }
 
 class GuiUtils {
-  static PreferredSize simpleAppBar({
-    String title = '',
-    String subtitle = '',
-    bool showBackButton = false
-  }) =>
+  static PreferredSize simpleAppBar(
+          {String title = '',
+          String subtitle = '',
+          bool showBackButton = false}) =>
       PreferredSize(
-        preferredSize: const Size.fromHeight(110),
+        preferredSize: const Size.fromHeight(120),
         child: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -70,19 +69,16 @@ class GuiUtils {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title,
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontFamily: 'OpenSans SemiBold',
-                        color: Colors.black)
-                      ),
+                        style: const TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'OpenSans SemiBold',
+                            color: Colors.black)),
                     if (subtitle.isNotEmpty)
                       Text(subtitle,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'OpenSans SemiBold',
-                          color: Colors.black
-                        )
-                      ),
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'OpenSans SemiBold',
+                              color: Colors.black)),
                   ],
                 ),
               ],
@@ -104,14 +100,12 @@ class GuiUtils {
 
 class FutureUtils {
   static Future<void> waitFor(bool Function() func, Duration duration) async {
-    while (!func())
-      await Future<void>.delayed(duration);
+    while (!func()) await Future<void>.delayed(duration);
   }
 
   static Future<void> waitForAsync(
       Future<bool> Function() func, Duration duration) async {
-    while (!(await func()))
-      await Future<void>.delayed(duration);
+    while (!(await func())) await Future<void>.delayed(duration);
   }
 }
 
@@ -129,7 +123,8 @@ class TypeUtils {
 // Copied & modified from "auto_id_generator.dart" from Firestore SDK
 class FirebaseAutoIdGenerator {
   static const int _AUTO_ID_LENGTH = 20;
-  static const String _AUTO_ID_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  static const String _AUTO_ID_ALPHABET =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   static final Random _random = Random();
 
   /// Automatically Generates a random new Id
