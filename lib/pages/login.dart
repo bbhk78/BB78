@@ -8,12 +8,15 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
+// TODO: PLEASE REMOVE ME WHEN DONE
+const bool TMP_DEBUG_FLAG = false;
+
 class Login extends GetWidget<AuthController> {
   Login({Key? key}) : super(key: key);
 
   // TODO: REMOVE DEFAULT TESTING VALUES
-  final RxString email = 'admin@bb78.com'.obs;
-  final RxString password = 'admin1234'.obs;
+  final RxString email = TMP_DEBUG_FLAG ? 'admin@bb78.com'.obs : ''.obs;
+  final RxString password = TMP_DEBUG_FLAG ? 'admin1234'.obs : ''.obs;
 
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
