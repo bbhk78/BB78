@@ -16,6 +16,9 @@ class GroupsView extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     final TeacherController teacherCtrl = Get.find<TeacherController>();
+    final List<Group> sortedGroups = teacherCtrl.groups..sort(
+        (Group a, Group b) => a.sortOrder.compareTo(b.sortOrder)
+    );
 
     return Scaffold(
       appBar: GuiUtils.simpleAppBar(
@@ -30,14 +33,14 @@ class GroupsView extends GetWidget<AuthController> {
           children: <Widget>[
             GridView.builder(
               shrinkWrap: true,
-              itemCount: teacherCtrl.groups.length,
+              itemCount: sortedGroups.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
                 crossAxisCount: 2,
               ),
               itemBuilder: (BuildContext context, int index) {
-                final Group currGroup = teacherCtrl.groups[index];
+                final Group currGroup = sortedGroups[index];
                 final Color currTileColor =
                     HALF_YEAR_TILE_COLORS[index % HALF_YEAR_TILE_COLORS.length];
                 final int numStudents = teacherCtrl.students

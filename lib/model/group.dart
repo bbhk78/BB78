@@ -9,6 +9,7 @@ class Group extends Equatable {
   final List<String> subGroupIds;
   final List<String> uniformClass;
   final String teacherId;
+  final int sortOrder;
 
   const Group({
     required this.id,
@@ -16,6 +17,7 @@ class Group extends Equatable {
     required this.subGroupIds,
     required this.uniformClass,
     required this.teacherId,
+    required this.sortOrder,
   });
 
   Map<String, dynamic> toFirestore() => <String, dynamic>{
@@ -23,6 +25,7 @@ class Group extends Equatable {
     'sub-groups': subGroupIds,
     'uniform-class': uniformClass,
     'teacher': teacherId,
+    'sort-order': sortOrder,
   };
 
   Group.fromFirestore(DocumentSnapshot<Map<String, dynamic>> document)
@@ -30,7 +33,8 @@ class Group extends Equatable {
       name = document.data()!['name'] as String,
       subGroupIds = TypeUtils.parseList<String>(document.data()!['sub-groups']),
       uniformClass = TypeUtils.parseList<String>(document.data()!['uniform-class']),
-      teacherId = document.data()!['teacher'] as String;
+      teacherId = document.data()!['teacher'] as String,
+      sortOrder = document.data()!['sort-order'] as int;
 
   @override
   List<Object> get props => <Object>[id, name];

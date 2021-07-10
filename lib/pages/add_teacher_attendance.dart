@@ -109,7 +109,7 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
                   message: Text('saving data'.tr),
                 ));
 
-                await Get.offAll<void>(() => Home(startIndex: 1));
+                Get.back<void>();
               }
             },
             child: Text(
