@@ -5,22 +5,22 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-List<DropdownMenuItem<LocaleBundle>> _languageItems(
-        LocalizationService service) =>
-    service.availableLangs
-        .map((LocaleBundle value) => DropdownMenuItem<LocaleBundle>(
-            value: value,
-            child: Text(
-              value.lang,
-              style: const TextStyle(
-                fontSize: 20,
-                fontFamily: 'OpenSans Regular',
-              ),
-            )))
-        .toList();
+List<DropdownMenuItem<LocaleBundle>> _languageItems(LocalizationService service) =>
+  service.availableLangs
+    .map((LocaleBundle value) => DropdownMenuItem<LocaleBundle>(
+      value: value,
+      child: Text(
+        value.lang,
+        style: const TextStyle(
+          fontSize: 20,
+          fontFamily: 'OpenSans Regular',
+        ),
+      )
+    ))
+    .toList();
 
 class Settings extends GetWidget<AuthController> {
-  const Settings({Key? key}) : super(key: key);
+  const Settings({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -117,36 +117,43 @@ class Settings extends GetWidget<AuthController> {
 }
 
 class About extends StatelessWidget {
-  const About({Key? key}) : super(key: key);
+  const About({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: GuiUtils.simpleAppBar(title: 'about'.tr, showBackButton: true),
-        body: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 1,
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'about app description'.tr,
-                      style: const TextStyle(
-                          fontFamily: 'OpenSans Regular', fontSize: 20),
-                    ),
-                    const SizedBox(height: 60),
-                    Text(
-                      'about app title'.tr,
-                      style: const TextStyle(
-                          fontFamily: 'OpenSans Regular', fontSize: 20),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+    appBar: GuiUtils.simpleAppBar(
+      title: 'about'.tr,
+      showBackButton: true
+    ),
+    body: Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 1,
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'about app description'.tr,
+                  style: const TextStyle(
+                    fontFamily: 'OpenSans Regular',
+                    fontSize: 20
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
-      );
+                const SizedBox(height: 60),
+                Text(
+                  'about app title'.tr,
+                  style: const TextStyle(
+                    fontFamily: 'OpenSans Regular',
+                    fontSize: 20
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    ),
+  );
 }

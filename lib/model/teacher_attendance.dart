@@ -9,7 +9,7 @@ class TeacherAttendanceDay {
 
   TeacherAttendanceDay.unknown()
       : date = Timestamp.fromDate(DateTimeHelper.today()),
-        status = AttendanceStatus.unknown;
+        status = StudentAttendanceStatus.unknown;
 
   TeacherAttendanceDay({
     required this.date,

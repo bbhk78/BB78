@@ -13,7 +13,7 @@ class StudentAttendanceDay {
 
   StudentAttendanceDay.unknown()
       : date = Timestamp.fromDate(DateTimeHelper.today()),
-        status = AttendanceStatus.unknown,
+        status = StudentAttendanceStatus.unknown,
         uniformDay = false;
 
   StudentAttendanceDay.simple({

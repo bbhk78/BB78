@@ -27,7 +27,7 @@ class Student extends Equatable {
   double get attendancePercent {
     final int totalDays = attendance.calendar.length;
     final int countedDays = attendance.calendar
-      .where((StudentAttendanceDay day) => AttendanceStatus.isPresent(day.status))
+      .where((StudentAttendanceDay day) => StudentAttendanceStatus.isPresent(day.status))
       .length;
 
     return (countedDays / totalDays) * 100;

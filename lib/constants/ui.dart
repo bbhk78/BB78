@@ -6,11 +6,12 @@ const Duration SPLASH_SCREEN_DURATION = Duration(seconds: 2);
 
 // ignore: non_constant_identifier_names
 final Map<String, Color> STATUS_COLORS = <String, Color>{
-  AttendanceStatus.absent: Colors.red.shade100,
-  AttendanceStatus.sick: Colors.orange.shade100,
-  AttendanceStatus.present: Colors.green.shade100,
-  AttendanceStatus.late: Colors.blue.shade100,
-  AttendanceStatus.unknown: Colors.grey.shade200,
+  StudentAttendanceStatus.absent: Colors.red.shade100,
+  StudentAttendanceStatus.sick: Colors.orange.shade100,
+  StudentAttendanceStatus.present: Colors.green.shade100,
+  StudentAttendanceStatus.late: Colors.blue.shade100,
+  StudentAttendanceStatus.pe: Colors.purple.shade100,
+  StudentAttendanceStatus.unknown: Colors.grey.shade200,
 };
 
 // ignore: non_constant_identifier_names
