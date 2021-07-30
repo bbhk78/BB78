@@ -8,45 +8,17 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-import 'package:boysbrigade/pages/signup.dart';
-
 // TODO: PLEASE REMOVE ME WHEN DONE
 const bool TMP_DEBUG_FLAG = true;
 
-class Login extends GetWidget<AuthController> {
-  Login({Key? key}) : super(key: key);
+class Signup extends GetWidget<AuthController> {
+  Signup({Key? key}) : super(key: key);
 
   // TODO: REMOVE DEFAULT TESTING VALUES
-  final RxString email = TMP_DEBUG_FLAG ? 'admin@bb78.com'.obs : ''.obs;
-  final RxString password = TMP_DEBUG_FLAG ? 'admin1234'.obs : ''.obs;
+  // final RxString email = TMP_DEBUG_FLAG ? 'admin@bb78.com'.obs : ''.obs;
+  // final RxString password = TMP_DEBUG_FLAG ? 'admin1234'.obs : ''.obs;
 
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-
-  Future<String?> attemptLogin() async {
-    String? errMessage;
-    try {
-      await controller.loginTeacher(email.value, password.value);
-
-      final TeacherController teacherCtrl = Get.find<TeacherController>();
-
-      // HACK: This delayed checking loop is so that the rest of the teacher
-      // data has time to load in before we render the home page.
-
-      // This also "solves" the issue where the user has *just* logged in
-      // but the teacher data isn't loaded in as of yet.
-
-      // NOTE: This is most probably a bad practice, but it works for now
-      await FutureUtils.waitFor(
-          () => teacherCtrl.hasData, const Duration(milliseconds: 50));
-      errMessage = null;
-    } on FirebaseAuthException catch (err) {
-      errMessage = err.message ?? 'Unknown error code: ${err.code}!';
-    } on Exception catch (err) {
-      errMessage = err.toString();
-    }
-
-    return errMessage;
-  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -54,7 +26,6 @@ class Login extends GetWidget<AuthController> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(40, 50, 40, 0),
             child: Form(
-              // TODO: Really should be using Column but too lazy to style login button to fill width for now...
               key: loginFormKey,
               child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -66,14 +37,14 @@ class Login extends GetWidget<AuthController> {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
-                    initialValue: email.value,
+                    // initialValue: email.value,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(3)),
                         borderSide: BorderSide(color: Colors.grey),
                       ),
                       fillColor: Colors.grey[200],
-                      hintText: 'enter email'.tr,
+                      hintText: 'new email',
                       filled: true,
                       hintStyle:
                           TextStyle(fontSize: 16, color: Colors.grey[600]),
@@ -81,7 +52,7 @@ class Login extends GetWidget<AuthController> {
                           vertical: 15, horizontal: 20),
                     ),
                     keyboardType: TextInputType.emailAddress,
-                    onChanged: (String newValue) => email.value = newValue,
+                    // onChanged: (String newValue) => email.value = newValue,
                     validator: ValidationBuilder()
                         .required('email required'.tr)
                         .email('invalid email'.tr)
@@ -89,7 +60,7 @@ class Login extends GetWidget<AuthController> {
                   ),
                   const SizedBox(height: 15),
                   TextFormField(
-                    initialValue: password.value,
+                    // initialValue: password.value,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -99,13 +70,13 @@ class Login extends GetWidget<AuthController> {
                       ),
                       fillColor: Colors.grey[200],
                       filled: true,
-                      hintText: 'enter password'.tr,
+                      hintText: 'new password',
                       hintStyle:
                           TextStyle(fontSize: 16, color: Colors.grey[700]),
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 15, horizontal: 20),
                     ),
-                    onChanged: (String newValue) => password.value = newValue,
+                    // onChanged: (String newValue) => password.value = newValue,
                     obscureText: true,
                     validator: ValidationBuilder()
                         .required('password required'.tr)
@@ -114,7 +85,7 @@ class Login extends GetWidget<AuthController> {
                   const SizedBox(height: 30),
                   RaisedButton(
                     child: Text(
-                      'login'.tr,
+                      'Signup',
                       style: const TextStyle(fontSize: 16),
                     ),
                     shape: const RoundedRectangleBorder(),
@@ -122,33 +93,9 @@ class Login extends GetWidget<AuthController> {
                     textColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         vertical: 15, horizontal: 20),
-                    onPressed: () async {
-                      if (loginFormKey.currentState!.validate()) {
-                        final String? errMessage =
-                            await Get.dialog<String?>(FutureProgressDialog(
-                          attemptLogin(),
-                          message: Text('loading'.tr),
-                        ));
-
-                        if (errMessage != null) {
-                          Get.rawSnackbar(
-                              title: 'login failed'.tr, message: errMessage);
-                        }
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 10),
-                    ),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute<dynamic>(
-                              builder: (BuildContext context) => Signup()));
+                      Navigator.pop(context);
                     },
-                    child: const Text('Signup'),
                   ),
                 ],
               ),
