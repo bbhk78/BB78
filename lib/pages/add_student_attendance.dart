@@ -36,7 +36,7 @@ class AddStudentAttendance extends GetWidget<AuthController> {
       );
 
     final int numStudentsRecorded = todayRollcall.values
-      .where((StudentAttendanceDay day) => day.status != StudentAttendanceStatus.unknown)
+      .where((StudentAttendanceDay day) => day.status != StudentAttendance.unknown)
       .length;
     final bool isUpdating = numStudentsRecorded != 0;
 
@@ -106,7 +106,7 @@ class AddStudentAttendance extends GetWidget<AuthController> {
         child: TextButton(
           onPressed: () async {
             final bool isValid = todayRollcall.values
-              .where((StudentAttendanceDay day) => day.status == StudentAttendanceStatus.unknown)
+              .where((StudentAttendanceDay day) => day.status == StudentAttendance.unknown)
               .isEmpty;
 
             if (!isValid)
@@ -187,7 +187,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(5),
             child: Text(
-              day.value.status.tr,
+              day.value.status.name.tr,
               style: const TextStyle(fontSize: 15),
               textAlign: TextAlign.center,
             ),

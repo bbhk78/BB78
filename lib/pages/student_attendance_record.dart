@@ -9,11 +9,11 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-List<DropdownMenuItem<String>> _attendanceStatusItems() => StudentAttendanceStatus.all
-  .map((String value) => DropdownMenuItem<String>(
+List<DropdownMenuItem<StudentAttendance>> _attendanceStatusItems() => StudentAttendance.values
+  .map((StudentAttendance value) => DropdownMenuItem<StudentAttendance>(
     value: value,
     child: Text(
-      value.tr,
+      value.name.tr,
       style: const TextStyle(
         fontSize: 18,
         fontFamily: 'OpenSans',
@@ -96,8 +96,8 @@ class StudentAttendanceRecord extends GetWidget<AuthController> {
                     ),
                   ),
                   Obx(() => DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      onChanged: (String? value) {
+                    child: DropdownButton<StudentAttendance>(
+                      onChanged: (StudentAttendance? value) {
                         // NOTE: There's no reason 'value' should be a nullable string here,
                         // but dart is complaining about a type compatibility problem so meh
                         day.value.status = value!;
@@ -195,7 +195,7 @@ class UniformPartPointsWidget extends StatelessWidget {
         ),
       ),
       Obx(() {
-        final bool isPresent = StudentAttendanceStatus.isPresent(day.value.status);
+        final bool isPresent = StudentAttendanceExt.isPresent(day.value.status);
         if (!isPresent || !day.value.uniform.containsKey(uniformPart))
           day.value.uniform[uniformPart] = 0;
 

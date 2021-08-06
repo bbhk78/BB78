@@ -6,11 +6,11 @@ import 'package:boysbrigade/model/teacher_attendance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-List<DropdownMenuItem<String>> _attendanceStatusItems() => TeacherAttendanceStatus.all
-  .map((String value) => DropdownMenuItem<String>(
+List<DropdownMenuItem<TeacherAttendance>> _attendanceStatusItems() => TeacherAttendance.values
+  .map((TeacherAttendance value) => DropdownMenuItem<TeacherAttendance>(
     value: value,
     child: Text(
-      value.tr,
+      value.name.tr,
       style: const TextStyle(
         fontSize: 18,
         fontFamily: 'OpenSans',
@@ -64,8 +64,8 @@ class TeacherAttendanceRecord extends GetWidget<AuthController> {
               ),
             ),
             Obx(() => DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                onChanged: (String? value) {
+              child: DropdownButton<TeacherAttendance>(
+                onChanged: (TeacherAttendance? value) {
                   // NOTE: There's no reason 'value' should be a nullable string here,
                   // but dart is complaining about a type compatibility problem so meh
                   day.value.status = value!;

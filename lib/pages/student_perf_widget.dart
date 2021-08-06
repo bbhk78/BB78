@@ -2,6 +2,7 @@ import 'package:boysbrigade/model/student_attendance.dart';
 import 'package:boysbrigade/model/student.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:boysbrigade/constants/data.dart';
 
 import 'package:boysbrigade/utils.dart';
 
@@ -124,7 +125,7 @@ class StudentPerformanceWidget extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                day.status.tr,
+                                day.status.name.tr,
                                 style: const TextStyle(
                                   fontFamily: 'OpenSans Regular',
                                   fontSize: 18

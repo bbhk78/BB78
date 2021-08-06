@@ -183,7 +183,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String attendanceStatus = day.status;
+    final StudentAttendance attendanceStatus = day.status;
     final int countedPoints = day.uniform.values.reduce(MathReducers.sum);
     final int maxPoints = day.uniform.values.length * MAX_POINTS_PER_UNIFORM_PART;
 
@@ -212,7 +212,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Text(
-                attendanceStatus.tr,
+                attendanceStatus.name.tr,
                 style: const TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
@@ -303,7 +303,7 @@ class TeacherAttendanceRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String attendanceStatus = day.status;
+    final TeacherAttendance attendanceStatus = day.status;
 
     return Row(
       children: <Widget>[
@@ -341,7 +341,7 @@ class TeacherAttendanceRowWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Text(
-                attendanceStatus.tr,
+                attendanceStatus.name.tr,
                 style: const TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),

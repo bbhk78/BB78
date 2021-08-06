@@ -5,11 +5,11 @@ import 'package:boysbrigade/utils.dart';
 
 class TeacherAttendanceDay {
   Timestamp date;
-  String status;
+  TeacherAttendance status;
 
   TeacherAttendanceDay.unknown()
       : date = Timestamp.fromDate(DateTimeHelper.today()),
-        status = StudentAttendanceStatus.unknown;
+        status = TeacherAttendance.unknown;
 
   TeacherAttendanceDay({
     required this.date,
@@ -23,7 +23,7 @@ class TeacherAttendanceDay {
 
   TeacherAttendanceDay.fromFirestoreData(Map<String, dynamic> data)
     : date = data['date'] as Timestamp,
-      status = data['status'] as String;
+      status = data['status'] as TeacherAttendance;
 }
 
 class TeacherAttendanceCalendar {

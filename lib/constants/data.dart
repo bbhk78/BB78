@@ -1,31 +1,54 @@
 const int MAX_POINTS_PER_UNIFORM_PART = 3;
 const int YEAR_OFFSET = 3;
 
-class StudentAttendanceStatus {
-  static String get unknown => '...';
-  static String get present => 'present';
-  static String get late    => 'late';
-  static String get sick    => 'sick';
-  static String get absent  => 'absent';
-  static String get pe      => 'pe';
 
-  static List<String> get all => <String>[
-    unknown, present, late, sick, absent, pe
-  ];
-
-  static bool isPresent(String status) => <String>[present, late].contains(status);
+enum StudentAttendance {
+  unknown, present, late, sick, absent, pe
 }
 
-class TeacherAttendanceStatus {
-  static String get unknown => '...';
-  static String get present => 'present';
-  static String get late    => 'late';
-  static String get sick    => 'sick';
-  static String get absent  => 'absent';
+extension StudentAttendanceExt on StudentAttendance {
+  static const Map<StudentAttendance, String> names = <StudentAttendance, String>{
+    StudentAttendance.unknown: '...',
+    StudentAttendance.present: 'present',
+    StudentAttendance.late: 'late',
+    StudentAttendance.sick: 'sick',
+    StudentAttendance.absent: 'absent',
+    StudentAttendance.pe: 'pe',
+  };
 
-  static List<String> get all => <String>[
-    unknown, present, late, sick, absent
-  ];
+  static StudentAttendance? parse(String name) {
+    for (final MapEntry<StudentAttendance, String> entry in names.entries)
+      if (entry.value == name)
+        return entry.key;
+    return null;
+  }
 
-  static bool isPresent(String status) => <String>[present, late].contains(status);
+  String get name => names[this]!;
+
+  static List<String> get all => names.values.toList();
+  static bool isPresent(StudentAttendance status) =>
+    status == StudentAttendance.present ||
+    status == StudentAttendance.late;
+}
+
+
+enum TeacherAttendance {
+  unknown, present, late, sick, absent
+}
+
+extension TeacherAttendanceExt on TeacherAttendance {
+  static const Map<TeacherAttendance, String> names = <TeacherAttendance, String>{
+    TeacherAttendance.unknown: '...',
+    TeacherAttendance.present: 'present',
+    TeacherAttendance.late: 'late',
+    TeacherAttendance.sick: 'sick',
+    TeacherAttendance.absent: 'absent'
+  };
+
+  String get name => names[this]!;
+
+  static List<String> get all => names.values.toList();
+  static bool isPresent(TeacherAttendance status) =>
+    status == TeacherAttendance.present ||
+    status == TeacherAttendance.late;
 }
