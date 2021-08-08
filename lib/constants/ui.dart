@@ -13,11 +13,3 @@ final Map<String, Color> STATUS_COLORS = <String, Color>{
   StudentAttendance.pe.name: Colors.purple.shade100,
   StudentAttendance.unknown.name: Colors.grey.shade200,
 };
-
-// ignore: non_constant_identifier_names
-final List<Color> HALF_YEAR_TILE_COLORS = <Color>[
-  Colors.red.shade100,
-  Colors.orange.shade100,
-  Colors.green.shade100,
-  Colors.blue.shade100,
-];

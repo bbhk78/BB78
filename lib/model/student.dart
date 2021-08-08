@@ -1,5 +1,5 @@
 import 'package:boysbrigade/constants/data.dart';
-import 'package:boysbrigade/controller/groups_ctrl.dart';
+import 'package:boysbrigade/controller/data_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -34,11 +34,15 @@ class Student extends Equatable {
   }
 
   double get uniformPercent {
-    final GroupsController groupCtrl = Get.find<GroupsController>();
-    final Group currGroup = groupCtrl.groups.firstWhere((Group group) => group.id == groupId);
+    final DataController dataCtrl = Get.find<DataController>();
+    final Group currGroup = dataCtrl.groups.firstWhere((Group group) => group.id == groupId);
 
-    final int totalPoints = attendance.calendar.length * currGroup.uniformClass.length * MAX_POINTS_PER_UNIFORM_PART;
-    final int countedPoints = attendance.calendar
+    final List<StudentAttendanceDay> countedDays = attendance.calendar
+      .where((StudentAttendanceDay day) => day.status != StudentAttendance.pe)
+      .toList();
+
+    final int totalPoints = countedDays.length * currGroup.uniformClass.length * MAX_POINTS_PER_UNIFORM_PART;
+    final int countedPoints = countedDays
       .map((StudentAttendanceDay day) => day.uniform.values.reduce(MathReducers.sum))
       .reduce(MathReducers.sum);
 

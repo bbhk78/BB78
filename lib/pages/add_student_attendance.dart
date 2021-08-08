@@ -1,7 +1,7 @@
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/constants/ui.dart';
 import 'package:boysbrigade/controller/auth_ctrl.dart';
-import 'package:boysbrigade/controller/teacher_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/student_attendance.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
@@ -19,7 +19,7 @@ class AddStudentAttendance extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final TeacherController teacherCtrl = Get.find<TeacherController>();
+    final UserController teacherCtrl = Get.find<UserController>();
 
     final Group currGroup = teacherCtrl.groups.first;
     final Map<Student, StudentAttendanceDay> todayRollcall =
@@ -80,14 +80,10 @@ class AddStudentAttendance extends GetWidget<AuthController> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: subGroupStudents.length,
                   itemBuilder: (BuildContext context, int studentIndex) {
-                    final Student currStudent =
-                        subGroupStudents[studentIndex];
-                    final StudentAttendanceDay currDay = todayRollcall
-                        .entries
-                        .firstWhere((MapEntry<Student, StudentAttendanceDay>
-                                entry) =>
-                            entry.key.id == currStudent.id)
-                        .value;
+                    final Student currStudent = subGroupStudents[studentIndex];
+                    final StudentAttendanceDay currDay = todayRollcall.entries.firstWhere(
+                      (MapEntry<Student, StudentAttendanceDay> entry) => entry.key.id == currStudent.id
+                    ).value;
 
                     return StudentAttendanceRowWidget(
                         group: currGroup,
@@ -182,7 +178,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
         child: Obx(() => Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: STATUS_COLORS[day.value.status],
+            color: STATUS_COLORS[day.value.status.name],
           ),
           child: Padding(
             padding: const EdgeInsets.all(5),

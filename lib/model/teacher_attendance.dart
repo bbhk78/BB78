@@ -8,8 +8,8 @@ class TeacherAttendanceDay {
   TeacherAttendance status;
 
   TeacherAttendanceDay.unknown()
-      : date = Timestamp.fromDate(DateTimeHelper.today()),
-        status = TeacherAttendance.unknown;
+    : date = Timestamp.fromDate(DateTimeHelper.today()),
+      status = TeacherAttendance.unknown;
 
   TeacherAttendanceDay({
     required this.date,
@@ -18,12 +18,12 @@ class TeacherAttendanceDay {
 
   Map<String, dynamic> toFirestore() => <String, dynamic>{
     'date': date,
-    'status': status
+    'status': status.name
   };
 
   TeacherAttendanceDay.fromFirestoreData(Map<String, dynamic> data)
     : date = data['date'] as Timestamp,
-      status = data['status'] as TeacherAttendance;
+      status = TeacherAttendanceExt.parse(data['status'] as String);
 }
 
 class TeacherAttendanceCalendar {

@@ -1,8 +1,7 @@
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/constants/ui.dart';
 import 'package:boysbrigade/controller/auth_ctrl.dart';
-import 'package:boysbrigade/controller/groups_ctrl.dart';
-import 'package:boysbrigade/controller/teacher_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/student_attendance.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
@@ -20,13 +19,12 @@ class DailyAttendanceReport extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final GroupsController groupsCtrl = Get.find<GroupsController>();
-    final TeacherController teacherCtrl = Get.find<TeacherController>();
+    final UserController userCtrl = Get.find<UserController>();
 
-    final List<Group> groups = teacherCtrl.groups;
-    final List<SubGroup> subgroups = teacherCtrl.subgroups;
-    final List<Student> students = teacherCtrl.students;
-    final List<Teacher> teachers = groupsCtrl.teachers;
+    final List<Group> groups = userCtrl.groups;
+    final List<SubGroup> subgroups = userCtrl.subgroups;
+    final List<Student> students = userCtrl.students;
+    final List<Teacher> teachers = userCtrl.teachers;
 
     // First construct student views
     final List<Widget> tabs = groups.map<Widget>(
@@ -78,7 +76,7 @@ class DailyAttendanceReport extends GetWidget<AuthController> {
     }).toList();
 
     // Then construct teacher view if applicable
-    if (teacherCtrl.teacher!.admin) {
+    if (userCtrl.user!.admin) {
       tabs.add(
         const Text('T',
           style: TextStyle(
@@ -89,10 +87,41 @@ class DailyAttendanceReport extends GetWidget<AuthController> {
         )
       );
 
-      final Widget teacherView = Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: TeacherGroupReportWidget(groups: groups, teachers: teachers),
+      final Widget teacherView = ListView.builder(
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        shrinkWrap: true,
+        itemCount: groups.length,
+        itemBuilder: (BuildContext context, int groupIndex) {
+          final Group group = groups[groupIndex];
+          final List<Teacher> currTeachers = teachers
+            .where((Teacher teacher) => teacher.groupId == group.id)
+            .toList();
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                group.name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'OpenSans Regular',
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              const Divider(thickness: 1),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: TeacherGroupReportWidget(teachers: currTeachers),
+              ),
+            ],
+          );
+        }
       );
+
+      // final Widget teacherView = Padding(
+      //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      //   child: TeacherGroupReportWidget(groups: groups, teachers: teachers),
+      // );
 
       tabViews.add(teacherView);
     }
@@ -132,9 +161,9 @@ class StudentGroupReportWidget extends StatelessWidget {
     Key? key,
     required this.students,
   }) : _studentsWithDays = students
-         .map((Student student) => student.todayAttendance)
-         .where((StudentAttendanceDay? day) => day != null)
-         .length, super(key: key);
+    .map((Student student) => student.todayAttendance)
+    .where((StudentAttendanceDay? day) => day != null)
+    .length, super(key: key);
 
   @override
   Widget build(BuildContext context) => Column(
@@ -207,7 +236,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: STATUS_COLORS[attendanceStatus],
+              color: STATUS_COLORS[attendanceStatus.name],
             ),
             child: Padding(
               padding: const EdgeInsets.all(5),
@@ -241,29 +270,29 @@ class StudentAttendanceRowWidget extends StatelessWidget {
 
 class TeacherGroupReportWidget extends StatelessWidget {
   final List<Teacher> teachers;
-  final List<Group> groups;
   final int _teachersWithDays;
 
   TeacherGroupReportWidget({
     Key? key,
     required this.teachers,
-    required this.groups,
   }) : _teachersWithDays = teachers
-         .map((Teacher teacher) => teacher.todayAttendance)
-         .where((TeacherAttendanceDay? day) => day != null)
-         .length, super(key: key);
+    .map((Teacher teacher) => teacher.todayAttendance)
+    .where((TeacherAttendanceDay? day) => day != null)
+    .length, super(key: key);
 
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       if (teachers.length != _teachersWithDays)
-        Text(
-          'not available'.tr,
-          // TODO: Make the text vertically center on the page
-          style: const TextStyle(
-            fontSize: 20,
-            fontFamily: 'OpenSans SemiBold',
+        Center(
+          child: Text(
+            'not available'.tr,
+            // TODO: Make the text vertically center on the page
+            style: const TextStyle(
+              fontSize: 20,
+              fontFamily: 'OpenSans SemiBold',
+            )
           )
         )
       else
@@ -274,12 +303,9 @@ class TeacherGroupReportWidget extends StatelessWidget {
           itemCount: teachers.length,
           itemBuilder: (BuildContext context, int teacherIndex) {
             final Teacher currTeacher = teachers[teacherIndex];
-            final Group currGroup = groups
-              .firstWhere((Group group) => currTeacher.groupId == group.id);
             final TeacherAttendanceDay currDay = currTeacher.todayAttendance!;
 
             return TeacherAttendanceRowWidget(
-              group: currGroup,
               teacher: currTeacher,
               day: currDay
             );
@@ -290,13 +316,11 @@ class TeacherGroupReportWidget extends StatelessWidget {
 }
 
 class TeacherAttendanceRowWidget extends StatelessWidget {
-  final Group group;
   final Teacher teacher;
   final TeacherAttendanceDay day;
 
   const TeacherAttendanceRowWidget({
     Key? key,
-    required this.group,
     required this.teacher,
     required this.day
   }) : super(key: key);
@@ -308,35 +332,24 @@ class TeacherAttendanceRowWidget extends StatelessWidget {
     return Row(
       children: <Widget>[
         Flexible(
+          flex: 4,
           fit: FlexFit.tight,
           child: Padding(
             padding: const EdgeInsets.all(10),
-            child: Text.rich(
-              TextSpan(
-                style: const TextStyle(fontSize: 18),
-                children: <TextSpan>[
-                  TextSpan(text: teacher.name),
-                  const TextSpan(text: ' ('),
-                  TextSpan(
-                      text: group.name,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const TextSpan(text: ')'),
-                ],
-              )
-            )
-            // Text(
-            //   '${teacher.name} (${group.name})',
-            //   style: const TextStyle(fontSize: 18),
-            //   textAlign: TextAlign.start,
-            // ),
+            child: Text(
+              teacher.name,
+              style: const TextStyle(fontSize: 18),
+              textAlign: TextAlign.start,
             ),
+          ),
         ),
         Flexible(
+          flex: 3,
           fit: FlexFit.tight,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: STATUS_COLORS[attendanceStatus],
+              color: STATUS_COLORS[attendanceStatus.name],
             ),
             child: Padding(
               padding: const EdgeInsets.all(5),

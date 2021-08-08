@@ -12,9 +12,9 @@ class StudentAttendanceDay {
   Map<String, int> uniform = HashMap<String, int>();
 
   StudentAttendanceDay.unknown()
-      : date = Timestamp.fromDate(DateTimeHelper.today()),
-        status = StudentAttendance.unknown,
-        uniformDay = false;
+    : date = Timestamp.fromDate(DateTimeHelper.today()),
+      status = StudentAttendance.unknown,
+      uniformDay = false;
 
   StudentAttendanceDay.simple({
     required this.date,
@@ -30,14 +30,14 @@ class StudentAttendanceDay {
 
   Map<String, dynamic> toFirestore() => <String, dynamic>{
     'date': date,
-    'status': status,
+    'status': status.name,
     'uniformDay': uniformDay,
     'uniform': uniform
   };
 
   StudentAttendanceDay.fromFirestoreData(Map<String, dynamic> data)
       : date = data['date'] as Timestamp,
-        status = data['status'] as StudentAttendance,
+        status = StudentAttendanceExt.parse(data['status'] as String),
         uniformDay = data['uniformDay'] as bool,
         uniform = TypeUtils.parseHashMap<String, int>(data['uniform']);
 }

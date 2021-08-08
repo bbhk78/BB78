@@ -1,7 +1,7 @@
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/constants/ui.dart';
 import 'package:boysbrigade/controller/auth_ctrl.dart';
-import 'package:boysbrigade/controller/groups_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/teacher.dart';
 import 'package:boysbrigade/model/teacher_attendance.dart';
@@ -10,20 +10,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:get/get.dart';
-
 import 'package:boysbrigade/utils.dart';
-
 
 class AddTeacherAttendance extends GetWidget<AuthController> {
   const AddTeacherAttendance({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final GroupsController groupsCtrl = Get.find<GroupsController>();
+    final UserController userCtrl = Get.find<UserController>();
 
     final Map<Teacher, TeacherAttendanceDay> todayRollcall =
       Map<Teacher, TeacherAttendanceDay>.fromEntries(
-        groupsCtrl.teachers.map(
+        userCtrl.teachers.map(
           (Teacher teacher) => MapEntry<Teacher, TeacherAttendanceDay>(
             teacher,
             teacher.attendance.calendar.firstWhere(
@@ -35,7 +33,7 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
       );
 
     final int numTeachersRecorded = todayRollcall.values
-      .where((TeacherAttendanceDay day) => day.status != StudentAttendance.unknown)
+      .where((TeacherAttendanceDay day) => day.status != TeacherAttendance.unknown)
       .length;
     final bool isUpdating = numTeachersRecorded != 0;
 
@@ -52,16 +50,13 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
               padding: const EdgeInsets.only(bottom: 10),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: groupsCtrl.groups.length,
+              itemCount: userCtrl.groups.length,
               itemBuilder: (BuildContext context, int groupIndex) {
-                final Group currGroup = groupsCtrl.groups[groupIndex];
-                final Teacher currTeacher = groupsCtrl.teachers
-                  .firstWhere((Teacher teacher) => teacher.groupId == currGroup.id);
-
-                final TeacherAttendanceDay currDay = todayRollcall.entries
-                  .firstWhere((MapEntry<Teacher, TeacherAttendanceDay> entry) => entry.key.id == currTeacher.id)
-                  .value;
-
+                final Group currGroup = userCtrl.groups[groupIndex];
+                final List<Teacher> teachersList = userCtrl.teachers
+                  .where((Teacher teacher) => teacher.groupId == currGroup.id)
+                  .toList();
+                
                 return ListView(
                   padding: const EdgeInsets.only(bottom: 10),
                   shrinkWrap: true,
@@ -78,10 +73,23 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
                       ),
                     ),
                     const Divider(thickness: 0.5),
-                    TeacherAttendanceRowWidget(
-                      group: currGroup,
-                      teacher: currTeacher,
-                      day: currDay
+                    ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: teachersList.length,
+                      itemBuilder: (BuildContext context, int studentIndex) {
+                        final Teacher currTeacher = teachersList[studentIndex];
+                        final TeacherAttendanceDay currDay = todayRollcall.entries
+                          .firstWhere((MapEntry<Teacher, TeacherAttendanceDay> entry) => entry.key.id == currTeacher.id)
+                          .value;
+
+                        return TeacherAttendanceRowWidget(
+                          group: currGroup,
+                          teacher: currTeacher,
+                          day: currDay
+                        );
+                      },
                     ),
                   ]
                 );
@@ -93,8 +101,10 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
           padding: const EdgeInsets.all(10),
           child: TextButton(
             onPressed: () async {
+              final UserController userCtrl = Get.find<UserController>();
+
               final bool isValid = todayRollcall.values
-                .where((TeacherAttendanceDay day) => day.status == StudentAttendance.unknown)
+                .where((TeacherAttendanceDay day) => day.status == TeacherAttendance.unknown)
                 .isEmpty;
 
               if (!isValid)
@@ -110,7 +120,7 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
               else {
                 await Get.dialog<void>(
                   FutureProgressDialog(
-                    groupsCtrl.addTeacherAttendanceUpdate(todayRollcall),
+                    userCtrl.addTeacherAttendanceUpdate(todayRollcall),
                     message: Text('saving data'.tr),
                   )
                 );
@@ -167,7 +177,7 @@ class TeacherAttendanceRowWidget extends StatelessWidget {
         child: Obx(() => Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: STATUS_COLORS[day.value.status],
+            color: STATUS_COLORS[day.value.status.name],
           ),
           child: Padding(
             padding: const EdgeInsets.all(5),

@@ -16,11 +16,11 @@ extension StudentAttendanceExt on StudentAttendance {
     StudentAttendance.pe: 'pe',
   };
 
-  static StudentAttendance? parse(String name) {
+  static StudentAttendance parse(String name) {
     for (final MapEntry<StudentAttendance, String> entry in names.entries)
       if (entry.value == name)
         return entry.key;
-    return null;
+    return StudentAttendance.unknown;
   }
 
   String get name => names[this]!;
@@ -44,6 +44,13 @@ extension TeacherAttendanceExt on TeacherAttendance {
     TeacherAttendance.sick: 'sick',
     TeacherAttendance.absent: 'absent'
   };
+
+  static TeacherAttendance parse(String name) {
+    for (final MapEntry<TeacherAttendance, String> entry in names.entries)
+      if (entry.value == name)
+        return entry.key;
+    return TeacherAttendance.unknown;
+  }
 
   String get name => names[this]!;
 

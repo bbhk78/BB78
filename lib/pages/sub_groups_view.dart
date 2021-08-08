@@ -1,6 +1,6 @@
 import 'package:boysbrigade/constants/ui.dart';
 import 'package:boysbrigade/controller/auth_ctrl.dart';
-import 'package:boysbrigade/controller/teacher_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
 import 'package:boysbrigade/model/subgroup.dart';
@@ -12,17 +12,15 @@ import 'package:boysbrigade/pages/sub_group_perf.dart';
 
 class SubGroupsView extends GetWidget<AuthController> {
   final Group group;
-  final Color tileColor;
 
   const SubGroupsView({
     Key? key,
-    required this.group,
-    required this.tileColor,
+    required this.group
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final TeacherController teacherCtrl = Get.find<TeacherController>();
+    final UserController teacherCtrl = Get.find<UserController>();
     final List<SubGroup> filteredSubGroups = teacherCtrl.subgroups.where(
       (SubGroup subgroup) => subgroup.groupId == group.id
     ).toList();
@@ -33,14 +31,13 @@ class SubGroupsView extends GetWidget<AuthController> {
         subtitle: '# of students'.tr + teacherCtrl.students
           .where((Student student) => student.groupId == group.id)
           .length.toString(),
-        showBackButton: true
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(30),
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             GridView.builder(
+              padding: const EdgeInsets.all(30),
               shrinkWrap: true,
               itemCount: filteredSubGroups.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -57,7 +54,7 @@ class SubGroupsView extends GetWidget<AuthController> {
                 return SubGroupCardWidget(
                   group: group,
                   subgroup: currSubGroup,
-                  tileColor: tileColor,
+                  tileColor: group.tileColor,
                   numStudents: numStudents
                 );
               },

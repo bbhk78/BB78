@@ -1,4 +1,4 @@
-import 'package:boysbrigade/controller/teacher_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/teacher.dart';
 import 'package:boysbrigade/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,14 +18,14 @@ class AuthController extends GetxController {
     _firebaseUser
       ..bindStream(_auth.authStateChanges())
       ..listen((User? user) async {
-        final TeacherController teacherCtrl = Get.find<TeacherController>();
+        final UserController teacherCtrl = Get.find<UserController>();
         final String? userEmail = user?.email;
 
         if (userEmail != null) {
           final Teacher? currTeacher = await Database.getTeacherByEmail(userEmail);
 
-          if (teacherCtrl.teacher?.id != currTeacher?.id)
-            teacherCtrl.teacher = currTeacher;
+          if (teacherCtrl.user?.id != currTeacher?.id)
+            teacherCtrl.user = currTeacher;
         }
       });
   }
@@ -40,7 +40,7 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-      Get.find<TeacherController>().clear();
+      Get.find<UserController>().clear();
     } on FirebaseAuthException catch (err) {
       Get.snackbar<void>('Error signing out!', err.message ?? 'Unknown reason');
     }

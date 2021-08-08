@@ -1,5 +1,5 @@
 import 'package:boysbrigade/controller/auth_ctrl.dart';
-import 'package:boysbrigade/controller/teacher_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
 import 'package:boysbrigade/model/subgroup.dart';
@@ -12,17 +12,15 @@ import 'package:boysbrigade/utils.dart';
 
 class GroupPerformance extends GetWidget<AuthController> {
   final Group group;
-  final Color tileColor;
 
   const GroupPerformance({
     Key? key,
     required this.group,
-    required this.tileColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final TeacherController teacherCtrl = Get.find<TeacherController>();
+    final UserController teacherCtrl = Get.find<UserController>();
 
     final List<Student> groupStudents = teacherCtrl.students
       .where((Student student) => student.groupId == group.id)
@@ -71,7 +69,7 @@ class GroupPerformance extends GetWidget<AuthController> {
 
                       return StudentPerformanceWidget(
                         student: currStudent,
-                        tileColor: tileColor
+                        tileColor: group.tileColor
                       );
                     },
                   ),

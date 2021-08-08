@@ -1,5 +1,5 @@
 import 'package:boysbrigade/controller/auth_ctrl.dart';
-import 'package:boysbrigade/controller/teacher_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_validator/form_validator.dart';
@@ -27,7 +27,7 @@ class Login extends GetWidget<AuthController> {
     try {
       await controller.loginTeacher(email.value, password.value);
 
-      final TeacherController teacherCtrl = Get.find<TeacherController>();
+      final UserController teacherCtrl = Get.find<UserController>();
 
       // HACK: This delayed checking loop is so that the rest of the teacher
       // data has time to load in before we render the home page.

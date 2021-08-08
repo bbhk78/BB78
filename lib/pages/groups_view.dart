@@ -1,6 +1,6 @@
 import 'package:boysbrigade/constants/ui.dart';
 import 'package:boysbrigade/controller/auth_ctrl.dart';
-import 'package:boysbrigade/controller/teacher_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
 import 'package:boysbrigade/pages/group_perf.dart';
@@ -15,7 +15,7 @@ class GroupsView extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final TeacherController teacherCtrl = Get.find<TeacherController>();
+    final UserController teacherCtrl = Get.find<UserController>();
     final List<Group> sortedGroups = teacherCtrl.groups..sort(
       (Group a, Group b) => a.sortOrder.compareTo(b.sortOrder)
     );
@@ -42,16 +42,14 @@ class GroupsView extends GetWidget<AuthController> {
               ),
               itemBuilder: (BuildContext context, int index) {
                 final Group currGroup = sortedGroups[index];
-                final Color currTileColor = HALF_YEAR_TILE_COLORS[index % HALF_YEAR_TILE_COLORS.length];
                 final int numStudents = teacherCtrl.students
                   .where((Student student) => student.groupId == currGroup.id)
                   .length;
 
                 return GroupCardWidget(
                   group: currGroup,
-                  tileColor: currTileColor,
                   numStudents: numStudents,
-                  showSubGroupsView: !teacherCtrl.teacher!.admin,
+                  showSubGroupsView: !teacherCtrl.user!.admin,
                 );
               },
             )
@@ -64,14 +62,14 @@ class GroupsView extends GetWidget<AuthController> {
 
 class GroupCardWidget extends StatelessWidget {
   final Group group;
-  final Color tileColor;
+  // final Color tileColor;
   final int numStudents;
   final bool showSubGroupsView;
 
   const GroupCardWidget({
     Key? key,
     required this.group,
-    required this.tileColor,
+    // required this.tileColor,
     required this.numStudents,
     required this.showSubGroupsView,
   }) : super(key: key);
@@ -109,13 +107,13 @@ class GroupCardWidget extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: tileColor,
+        color: group.tileColor,
       ),
     ),
     onTap: () => Get.to<void>(
       () => showSubGroupsView
-        ? SubGroupsView(group: group, tileColor: tileColor)
-        : GroupPerformance(group: group, tileColor: tileColor)
+        ? SubGroupsView(group: group)
+        : GroupPerformance(group: group)
     ),
   );
 }

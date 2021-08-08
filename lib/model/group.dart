@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:boysbrigade/constants/ui.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -8,24 +11,27 @@ class Group extends Equatable {
   final String name;
   final List<String> subGroupIds;
   final List<String> uniformClass;
-  final String teacherId;
+  final List<String> teacherIds;
   final int sortOrder;
+  final Color tileColor;
 
   const Group({
     required this.id,
     required this.name,
     required this.subGroupIds,
     required this.uniformClass,
-    required this.teacherId,
+    required this.teacherIds,
     required this.sortOrder,
+    required this.tileColor,
   });
 
   Map<String, dynamic> toFirestore() => <String, dynamic>{
     'name': name,
     'sub-groups': subGroupIds,
     'uniform-class': uniformClass,
-    'teacher': teacherId,
+    'teachers': teacherIds,
     'sort-order': sortOrder,
+    'tile-color': tileColor.toString(),
   };
 
   Group.fromFirestore(DocumentSnapshot<Map<String, dynamic>> document)
@@ -33,8 +39,11 @@ class Group extends Equatable {
       name = document.data()!['name'] as String,
       subGroupIds = TypeUtils.parseList<String>(document.data()!['sub-groups']),
       uniformClass = TypeUtils.parseList<String>(document.data()!['uniform-class']),
-      teacherId = document.data()!['teacher'] as String,
-      sortOrder = document.data()!['sort-order'] as int;
+      teacherIds = TypeUtils.parseList<String>(document.data()!['teachers']),
+      sortOrder = document.data()!['sort-order'] as int,
+      tileColor = Color(int.parse(
+        (document.data()!['tile-color'] as String).replaceAll('#', '0xff')
+      ));
 
   @override
   List<Object> get props => <Object>[id, name];

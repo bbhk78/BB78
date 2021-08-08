@@ -34,7 +34,7 @@ class Teacher extends Equatable {
 
   TeacherAttendanceDay? get todayAttendance {
     final List<TeacherAttendanceDay> validDays = attendance.calendar.where(
-            (TeacherAttendanceDay day) => day.date.toDate().isToday()
+      (TeacherAttendanceDay day) => day.date.toDate().isToday()
     ).toList();
 
     return validDays.isEmpty ? null : validDays.first;
