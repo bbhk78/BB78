@@ -109,7 +109,7 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
 
               if (!isValid)
                 await Get.defaultDialog<void>(
-                  middleText: 'need all attendance'.tr,
+                  middleText: 'need all teacher attendance'.tr,
                   radius: 0,
                   textConfirm: 'ok'.tr,
                   barrierDismissible: false,

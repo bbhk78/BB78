@@ -21,6 +21,8 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
     'late': 'Late',
     'sick': 'Sick',
     'absent': 'Absent',
+    // TODO: get translation
+    'pe': 'PE',
     'attendance': 'Attendance',
     'uniform': 'Uniform',
     'marks': 'Marks',
@@ -47,7 +49,8 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
     'invalid email': 'Invalid email',
     'loading': 'Loading...',
     'done': 'Done',
-    'need all attendance': 'You need to assign attendance for all students',
+    'need all student attendance': 'You need to assign attendance for all students',
+    'need all teacher attendance': 'You need to assign attendance for all teachers',
     'not available': 'Not Available :(',
     'password required': 'Password required',
     'login failed': 'Login failed!',

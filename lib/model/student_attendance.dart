@@ -8,38 +8,33 @@ import 'package:boysbrigade/utils.dart';
 class StudentAttendanceDay {
   Timestamp date;
   StudentAttendance status;
-  bool uniformDay;
   Map<String, int> uniform = HashMap<String, int>();
 
   StudentAttendanceDay.unknown()
     : date = Timestamp.fromDate(DateTimeHelper.today()),
-      status = StudentAttendance.unknown,
-      uniformDay = false;
+      status = StudentAttendance.unknown;
 
   StudentAttendanceDay.simple({
     required this.date,
     required this.status,
-  }) : uniformDay = false;
+  });
 
   StudentAttendanceDay({
     required this.date,
     required this.status,
-    required this.uniformDay,
     required this.uniform,
   });
 
   Map<String, dynamic> toFirestore() => <String, dynamic>{
     'date': date,
     'status': status.name,
-    'uniformDay': uniformDay,
     'uniform': uniform
   };
 
   StudentAttendanceDay.fromFirestoreData(Map<String, dynamic> data)
-      : date = data['date'] as Timestamp,
-        status = StudentAttendanceExt.parse(data['status'] as String),
-        uniformDay = data['uniformDay'] as bool,
-        uniform = TypeUtils.parseHashMap<String, int>(data['uniform']);
+    : date = data['date'] as Timestamp,
+      status = StudentAttendanceExt.parse(data['status'] as String),
+      uniform = TypeUtils.parseHashMap<String, int>(data['uniform']);
 }
 
 class StudentAttendanceCalendar {

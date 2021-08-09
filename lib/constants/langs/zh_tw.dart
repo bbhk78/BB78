@@ -21,6 +21,8 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'late': '遲到',
     'sick': '請假',
     'absent': '缺席',
+    // TODO: get translation
+    'pe': 'PE',
     'attendance': '出席率',
     'uniform': '制服',
     'marks': '分數',
@@ -47,7 +49,9 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'invalid email': '電郵地址',
     'loading': '載入中',
     'done': '完成',
-    'need all attendance': '請輸入所有隊員的出席率',
+    'need all student attendance': '請輸入所有隊員的出席率',
+    // TODO: get translation
+    'need all teacher attendance': 'You need to assign attendance for all teachers',
     'not available': '沒有數據 :(',
     'password required': '請輸入密碼',
     'login failed': '登入失敗',
