@@ -27,34 +27,33 @@ class GroupsView extends GetWidget<AuthController> {
           ? 'first half year'.tr
           : 'second half year'.tr
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            GridView.builder(
-              shrinkWrap: true,
-              itemCount: sortedGroups.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-                crossAxisCount: 2,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                final Group currGroup = sortedGroups[index];
-                final int numStudents = teacherCtrl.students
-                  .where((Student student) => student.groupId == currGroup.id)
-                  .length;
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          GridView.builder(
+            padding: const EdgeInsets.all(30),
+            shrinkWrap: true,
+            itemCount: sortedGroups.length,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisSpacing: 20,
+              mainAxisSpacing: 20,
+              crossAxisCount: 2,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              final Group currGroup = sortedGroups[index];
+              final int numStudents = teacherCtrl.students
+                .where((Student student) => student.groupId == currGroup.id)
+                .length;
 
-                return GroupCardWidget(
-                  group: currGroup,
-                  numStudents: numStudents,
-                  showSubGroupsView: !teacherCtrl.user!.admin,
-                );
-              },
-            )
-          ],
-        ),
+              return GroupCardWidget(
+                group: currGroup,
+                numStudents: numStudents,
+                showSubGroupsView: !teacherCtrl.user!.admin,
+              );
+            },
+          )
+        ],
       ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:boysbrigade/constants/ui.dart';
 import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
@@ -40,6 +39,7 @@ class SubGroupsView extends GetWidget<AuthController> {
               padding: const EdgeInsets.all(30),
               shrinkWrap: true,
               itemCount: filteredSubGroups.length,
+              physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20,
