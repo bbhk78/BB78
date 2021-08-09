@@ -19,7 +19,8 @@ class StudentPerformanceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RxBool showMoreDetails = false.obs;
-    final bool emptyCalendar = currStudent.attendance.calendar.isEmpty;
+    final bool hasAttendanceDays = currStudent.attendance.calendar.isNotEmpty;
+    final bool hasUniformDays = currStudent.attendance.hasUniformDays;
 
     return InkWell(
       child: Card(
@@ -56,7 +57,7 @@ class StudentPerformanceWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        emptyCalendar
+                        !hasAttendanceDays
                           ? 'n/a'.tr
                           : '${currStudent.attendancePercent.toInt()}%',
                         style: const TextStyle(
@@ -79,7 +80,7 @@ class StudentPerformanceWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        emptyCalendar
+                        !hasUniformDays
                           ? 'n/a'.tr
                           : '${currStudent.uniformPercent.toInt()}%',
                         style: const TextStyle(
@@ -92,10 +93,10 @@ class StudentPerformanceWidget extends StatelessWidget {
                 ),
               ],
             ),
-            Obx(() => showMoreDetails.value && !emptyCalendar
+            Obx(() => showMoreDetails.value && hasAttendanceDays
               ? const Divider(color: Colors.grey)
               : const SizedBox.shrink()),
-            Obx(() => showMoreDetails.value && !emptyCalendar
+            Obx(() => showMoreDetails.value && hasAttendanceDays
               ? SizedBox(
                   height: 100,
                   child: ListView.builder(
@@ -132,7 +133,9 @@ class StudentPerformanceWidget extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '$totalPoints',
+                                day.status == StudentAttendance.pe
+                                  ? 'n/a'
+                                  : '$totalPoints',
                                 style: const TextStyle(
                                   fontFamily: 'OpenSans Regular',
                                   fontSize: 18

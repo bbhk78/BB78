@@ -28,7 +28,8 @@ extension StudentAttendanceExt on StudentAttendance {
   static List<String> get all => names.values.toList();
   static bool isPresent(StudentAttendance status) =>
     status == StudentAttendance.present ||
-    status == StudentAttendance.late;
+    status == StudentAttendance.late ||
+    status == StudentAttendance.pe;
 }
 
 

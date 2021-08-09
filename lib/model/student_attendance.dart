@@ -42,6 +42,10 @@ class StudentAttendanceCalendar {
 
   StudentAttendanceCalendar({ this.calendar = const <StudentAttendanceDay>[] });
 
+  bool get hasUniformDays => calendar
+    .where((StudentAttendanceDay day) => day.status != StudentAttendance.pe)
+    .isNotEmpty;
+
   List<dynamic> toFirestore() => calendar
     .map((StudentAttendanceDay day) => day.toFirestore())
     .toList();
