@@ -19,7 +19,7 @@ Widget showTab(int index, Widget homeWidget) {
   }
 }
 
-class Home extends GetWidget<AuthController> {
+class Home extends GetWidget<UserController> {
   final int startIndex;
   final RxInt selectedTab = 0.obs;
 
@@ -29,13 +29,11 @@ class Home extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final UserController teacherCtrl = Get.find<UserController>();
-
     Widget homeWidget;
-    if (teacherCtrl.user!.admin)
+    if (controller.user!.admin)
       homeWidget = const GroupsView();
     else
-      homeWidget = SubGroupsView(group: teacherCtrl.groups[0]);
+      homeWidget = SubGroupsView(group: controller.groups[0]);
 
     return Obx(() => Scaffold(
       body: Center(
@@ -66,7 +64,7 @@ class Home extends GetWidget<AuthController> {
         ],
       ),
       floatingActionButton: selectedTab.value == 0
-        ? AddAttendanceFab(teacherCtrl.user!.admin)
+        ? AddAttendanceFab(controller.user!.admin)
         : null
     ));
   }

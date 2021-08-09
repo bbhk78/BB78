@@ -18,14 +18,14 @@ class AuthController extends GetxController {
     _firebaseUser
       ..bindStream(_auth.authStateChanges())
       ..listen((User? user) async {
-        final UserController teacherCtrl = Get.find<UserController>();
+        final UserController userCtrl = Get.find<UserController>();
         final String? userEmail = user?.email;
 
         if (userEmail != null) {
           final Teacher? currTeacher = await Database.getTeacherByEmail(userEmail);
 
-          if (teacherCtrl.user?.id != currTeacher?.id)
-            teacherCtrl.user = currTeacher;
+          if (userCtrl.user?.id != currTeacher?.id)
+            userCtrl.user = currTeacher;
         }
       });
   }

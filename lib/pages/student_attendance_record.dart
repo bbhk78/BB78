@@ -1,5 +1,4 @@
 import 'package:boysbrigade/constants/data.dart';
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
 import 'package:boysbrigade/model/student_attendance.dart';
@@ -35,7 +34,7 @@ List<DropdownMenuItem<int>> _uniformMarkItems() => 0.to(3)
   ))
   .toList();
 
-class StudentAttendanceRecord extends GetWidget<AuthController> {
+class StudentAttendanceRecord extends StatelessWidget {
   final Group group;
   final SubGroup subgroup;
   final Student student;

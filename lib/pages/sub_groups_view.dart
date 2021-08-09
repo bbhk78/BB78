@@ -1,4 +1,3 @@
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
@@ -9,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:boysbrigade/utils.dart';
 import 'package:boysbrigade/pages/sub_group_perf.dart';
 
-class SubGroupsView extends GetWidget<AuthController> {
+class SubGroupsView extends GetWidget<UserController> {
   final Group group;
 
   const SubGroupsView({
@@ -19,15 +18,14 @@ class SubGroupsView extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final UserController teacherCtrl = Get.find<UserController>();
-    final List<SubGroup> filteredSubGroups = teacherCtrl.subgroups.where(
+    final List<SubGroup> filteredSubGroups = controller.subgroups.where(
       (SubGroup subgroup) => subgroup.groupId == group.id
     ).toList();
 
     return Scaffold(
       appBar: GuiUtils.simpleAppBar(
         title: group.name,
-        subtitle: '# of students'.tr + teacherCtrl.students
+        subtitle: '# of students'.tr + controller.students
           .where((Student student) => student.groupId == group.id)
           .length.toString(),
       ),
@@ -47,7 +45,7 @@ class SubGroupsView extends GetWidget<AuthController> {
               ),
               itemBuilder: (BuildContext context, int index) {
                 final SubGroup currSubGroup = filteredSubGroups[index];
-                final int numStudents = teacherCtrl.students
+                final int numStudents = controller.students
                   .where((Student student) => student.subgroupId == currSubGroup.id)
                   .length;
 

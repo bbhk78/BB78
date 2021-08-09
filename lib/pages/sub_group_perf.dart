@@ -1,4 +1,3 @@
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
@@ -9,7 +8,7 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-class SubGroupPerformance extends GetWidget<AuthController> {
+class SubGroupPerformance extends GetWidget<UserController> {
   final Group group;
   final SubGroup subgroup;
   final Color tileColor;
@@ -23,9 +22,7 @@ class SubGroupPerformance extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final UserController teacherCtrl = Get.find<UserController>();
-
-    final List<Student> students = teacherCtrl.students
+    final List<Student> students = controller.students
       .where((Student student) => student.subgroupId == subgroup.id)
       .toList();
 

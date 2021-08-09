@@ -1,5 +1,4 @@
 import 'package:boysbrigade/constants/data.dart';
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/teacher.dart';
 import 'package:boysbrigade/model/teacher_attendance.dart';
@@ -18,7 +17,7 @@ List<DropdownMenuItem<TeacherAttendance>> _attendanceStatusItems() => TeacherAtt
     )
   )).toList();
 
-class TeacherAttendanceRecord extends GetWidget<AuthController> {
+class TeacherAttendanceRecord extends StatelessWidget {
   final Group group;
   final Teacher teacher;
   final Rx<TeacherAttendanceDay> day;

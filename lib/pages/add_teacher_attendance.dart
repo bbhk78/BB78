@@ -1,6 +1,5 @@
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/constants/ui.dart';
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/teacher.dart';
@@ -12,16 +11,14 @@ import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:get/get.dart';
 import 'package:boysbrigade/utils.dart';
 
-class AddTeacherAttendance extends GetWidget<AuthController> {
+class AddTeacherAttendance extends GetWidget<UserController> {
   const AddTeacherAttendance({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final UserController userCtrl = Get.find<UserController>();
-
     final Map<Teacher, TeacherAttendanceDay> todayRollcall =
       Map<Teacher, TeacherAttendanceDay>.fromEntries(
-        userCtrl.teachers.map(
+        controller.teachers.map(
           (Teacher teacher) => MapEntry<Teacher, TeacherAttendanceDay>(
             teacher,
             teacher.attendance.calendar.firstWhere(
@@ -50,10 +47,10 @@ class AddTeacherAttendance extends GetWidget<AuthController> {
               padding: const EdgeInsets.only(bottom: 10),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: userCtrl.groups.length,
+              itemCount: controller.groups.length,
               itemBuilder: (BuildContext context, int groupIndex) {
-                final Group currGroup = userCtrl.groups[groupIndex];
-                final List<Teacher> teachersList = userCtrl.teachers
+                final Group currGroup = controller.groups[groupIndex];
+                final List<Teacher> teachersList = controller.teachers
                   .where((Teacher teacher) => teacher.groupId == currGroup.id)
                   .toList();
                 

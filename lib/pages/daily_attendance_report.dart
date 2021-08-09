@@ -1,6 +1,5 @@
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/constants/ui.dart';
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/student_attendance.dart';
 import 'package:boysbrigade/model/group.dart';
@@ -14,17 +13,15 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-class DailyAttendanceReport extends GetWidget<AuthController> {
+class DailyAttendanceReport extends GetWidget<UserController> {
   const DailyAttendanceReport({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final UserController userCtrl = Get.find<UserController>();
-
-    final List<Group> groups = userCtrl.groups;
-    final List<SubGroup> subgroups = userCtrl.subgroups;
-    final List<Student> students = userCtrl.students;
-    final List<Teacher> teachers = userCtrl.teachers;
+    final List<Group> groups = controller.groups;
+    final List<SubGroup> subgroups = controller.subgroups;
+    final List<Student> students = controller.students;
+    final List<Teacher> teachers = controller.teachers;
 
     // First construct student views
     final List<Widget> tabs = groups.map<Widget>(
@@ -76,7 +73,7 @@ class DailyAttendanceReport extends GetWidget<AuthController> {
     }).toList();
 
     // Then construct teacher view if applicable
-    if (userCtrl.user!.admin) {
+    if (controller.user!.admin) {
       tabs.add(
         const Text('T',
           style: TextStyle(

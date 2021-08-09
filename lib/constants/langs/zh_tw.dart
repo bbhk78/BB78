@@ -35,6 +35,8 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'belt': '皮帶',
     'tie': '領帶',
     'submit': '提交',
+    // TODO: get translation
+    'save': 'Save',
     'settings': '設定',
     'about': '關於',
     'language': '語言',

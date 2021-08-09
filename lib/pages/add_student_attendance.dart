@@ -1,6 +1,5 @@
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/constants/ui.dart';
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/student_attendance.dart';
 import 'package:boysbrigade/model/group.dart';
@@ -14,17 +13,15 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-class AddStudentAttendance extends GetWidget<AuthController> {
+class AddStudentAttendance extends GetWidget<UserController> {
   const AddStudentAttendance({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final UserController teacherCtrl = Get.find<UserController>();
-
-    final Group currGroup = teacherCtrl.groups.first;
+    final Group currGroup = controller.groups.first;
     final Map<Student, StudentAttendanceDay> todayRollcall =
       Map<Student, StudentAttendanceDay>.fromEntries(
-        teacherCtrl.students.map(
+          controller.students.map(
           (Student student) => MapEntry<Student, StudentAttendanceDay>(
             student,
             student.attendance.calendar.firstWhere(
@@ -51,9 +48,9 @@ class AddStudentAttendance extends GetWidget<AuthController> {
         child: ListView.builder(
           padding: const EdgeInsets.only(bottom: 10),
           shrinkWrap: true,
-          itemCount: teacherCtrl.subgroups.length,
+          itemCount: controller.subgroups.length,
           itemBuilder: (BuildContext context, int subgroupIndex) {
-            final SubGroup currSubGroup = teacherCtrl.subgroups[subgroupIndex];
+            final SubGroup currSubGroup = controller.subgroups[subgroupIndex];
             final List<Student> subGroupStudents = todayRollcall.keys
               .where((Student student) => currSubGroup.studentIds.contains(student.id))
               .toList();
@@ -86,10 +83,11 @@ class AddStudentAttendance extends GetWidget<AuthController> {
                     ).value;
 
                     return StudentAttendanceRowWidget(
-                        group: currGroup,
-                        subgroup: currSubGroup,
-                        student: currStudent,
-                        day: currDay);
+                      group: currGroup,
+                      subgroup: currSubGroup,
+                      student: currStudent,
+                      day: currDay
+                    );
                   },
                 ),
               ]
@@ -118,7 +116,7 @@ class AddStudentAttendance extends GetWidget<AuthController> {
             else {
               await Get.dialog<void>(
                 FutureProgressDialog(
-                  teacherCtrl.addStudentAttendanceUpdate(todayRollcall),
+                  controller.addStudentAttendanceUpdate(todayRollcall),
                   message: Text('saving data'.tr),
                 )
               );
@@ -152,7 +150,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
     required this.subgroup,
     required this.student,
     required StudentAttendanceDay day
-  }): day = day.obs, super(key: key);
+  }) : day = day.obs, super(key: key);
 
   @override
   Widget build(BuildContext context) => Row(

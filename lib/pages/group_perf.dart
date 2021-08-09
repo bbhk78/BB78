@@ -1,4 +1,3 @@
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
@@ -6,11 +5,12 @@ import 'package:boysbrigade/model/subgroup.dart';
 import 'package:boysbrigade/pages/student_perf_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
+import 'package:boysbrigade/pages/manage_subgroup_students.dart';
 
+import 'package:get/get.dart';
 import 'package:boysbrigade/utils.dart';
 
-class GroupPerformance extends GetWidget<AuthController> {
+class GroupPerformance extends GetWidget<UserController> {
   final Group group;
 
   const GroupPerformance({
@@ -20,13 +20,11 @@ class GroupPerformance extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final UserController teacherCtrl = Get.find<UserController>();
-
-    final List<Student> groupStudents = teacherCtrl.students
+    final List<Student> groupStudents = controller.students
       .where((Student student) => student.groupId == group.id)
       .toList();
 
-    final List<SubGroup> subgroups = teacherCtrl.subgroups
+    final List<SubGroup> subgroups = controller.subgroups
       .where((SubGroup subgroup) => subgroup.groupId == group.id)
       .toList();
 
@@ -43,19 +41,33 @@ class GroupPerformance extends GetWidget<AuthController> {
           itemCount: subgroups.length,
           itemBuilder: (BuildContext context, int subGroupIndex) {
             final SubGroup subgroup = subgroups[subGroupIndex];
-            final List<Student> subGroupStudents = teacherCtrl.students
+            final List<Student> subGroupStudents = controller.students
               .where((Student student) => subgroup.studentIds.contains(student.id))
               .toList();
             
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  subgroup.name,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontFamily: 'OpenSans Regular'
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      subgroup.name,
+                      style: const TextStyle(
+                          fontSize: 22,
+                          fontFamily: 'OpenSans Regular'
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () => Get.to<void>(
+                        ManageSubGroupStudents(
+                          subgroup: subgroup,
+                          students: subGroupStudents
+                        )
+                      ),
+                    )
+                  ],
                 ),
                 const Divider(thickness: 0.5),
                 Padding(

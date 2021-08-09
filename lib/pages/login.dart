@@ -27,7 +27,7 @@ class Login extends GetWidget<AuthController> {
     try {
       await controller.loginTeacher(email.value, password.value);
 
-      final UserController teacherCtrl = Get.find<UserController>();
+      final UserController userCtrl = Get.find<UserController>();
 
       // HACK: This delayed checking loop is so that the rest of the teacher
       // data has time to load in before we render the home page.
@@ -37,7 +37,7 @@ class Login extends GetWidget<AuthController> {
 
       // NOTE: This is most probably a bad practice, but it works for now
       await FutureUtils.waitFor(
-        () => teacherCtrl.hasData, const Duration(milliseconds: 50)
+        () => userCtrl.hasData, const Duration(milliseconds: 50)
       );
       errMessage = null;
     } on FirebaseAuthException catch (err) {

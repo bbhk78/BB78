@@ -11,7 +11,7 @@ class Preload extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final UserController teacherCtrl = Get.find<UserController>();
+    final UserController userCtrl = Get.find<UserController>();
     final RxBool isUserReady = false.obs;
 
     // NOTE: We're using a status stream for properly implementing the "Remember Me"
@@ -19,9 +19,9 @@ class Preload extends GetWidget<AuthController> {
     // it solves the problem where the user is not null but the teacher data is not
     // fully populated by the streams.
     return StreamBuilder<UserStatus?>(
-      stream: teacherCtrl.teacherStatusStream,
+      stream: userCtrl.teacherStatusStream,
       builder: (BuildContext context, AsyncSnapshot<Object?> snapshot) {
-        isUserReady.value = controller.user?.uid != null && teacherCtrl.hasData;
+        isUserReady.value = controller.user?.uid != null && userCtrl.hasData;
         return Obx(() => isUserReady.value ? Home() : Login());
       },
     );

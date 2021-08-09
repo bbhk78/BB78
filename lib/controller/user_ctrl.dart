@@ -22,18 +22,18 @@ class UserController extends GetxController {
   final Rxn<Teacher> _user = Rxn<Teacher>();
   Teacher? get user => _user.value;
 
-  final RxList<Group> _groups = <Group>[].obs;
+  RxList<Group> _groups = <Group>[].obs;
   List<Group> get groups => _groups.toList();
   set groups(List<Group> value) => _groups.value = value;
 
-  final RxList<SubGroup> _subgroups = <SubGroup>[].obs;
+  RxList<SubGroup> _subgroups = <SubGroup>[].obs;
   List<SubGroup> get subgroups => _subgroups.toList();
   set subgroups(List<SubGroup> value) => _subgroups.value = value;
 
-  final RxList<Teacher> _teachers = <Teacher>[].obs;
+  RxList<Teacher> _teachers = <Teacher>[].obs;
   List<Teacher> get teachers => _teachers.toList();
 
-  final RxList<Student> _students = <Student>[].obs;
+  RxList<Student> _students = <Student>[].obs;
   List<Student> get students => _students.toList();
 
   // This stream is used for properly implementing the "Remember Me" functionality
@@ -68,6 +68,18 @@ class UserController extends GetxController {
       _students
         ..bindStream(Database.studentsStream(value.admin ? null : groups.first.id))
         ..listen((_) => _updateTeacherStatus());
+    } else {
+      _groups.close();
+      _groups = <Group>[].obs;
+
+      _subgroups.close();
+      _subgroups = <SubGroup>[].obs;
+
+      _teachers.close();
+      _teachers = <Teacher>[].obs;
+
+      _students.close();
+      _students = <Student>[].obs;
     }
 
     _updateTeacherStatus();
@@ -162,8 +174,5 @@ class UserController extends GetxController {
 
   void clear() {
     user = null;
-    _groups.clear();
-    _subgroups.clear();
-    _students.clear();
   }
 }

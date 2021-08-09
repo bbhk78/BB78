@@ -35,6 +35,7 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
     'belt': 'Belt',
     'tie': 'Tie',
     'submit': 'Submit',
+    'save': 'Save',
     'settings': 'Settings',
     'about': 'About',
     'language': 'Language',

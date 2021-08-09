@@ -1,5 +1,3 @@
-import 'package:boysbrigade/constants/ui.dart';
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/student.dart';
@@ -10,13 +8,12 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-class GroupsView extends GetWidget<AuthController> {
+class GroupsView extends GetWidget<UserController> {
   const GroupsView({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final UserController teacherCtrl = Get.find<UserController>();
-    final List<Group> sortedGroups = teacherCtrl.groups..sort(
+    final List<Group> sortedGroups = controller.groups..sort(
       (Group a, Group b) => a.sortOrder.compareTo(b.sortOrder)
     );
 
@@ -42,14 +39,14 @@ class GroupsView extends GetWidget<AuthController> {
             ),
             itemBuilder: (BuildContext context, int index) {
               final Group currGroup = sortedGroups[index];
-              final int numStudents = teacherCtrl.students
+              final int numStudents = controller.students
                 .where((Student student) => student.groupId == currGroup.id)
                 .length;
 
               return GroupCardWidget(
                 group: currGroup,
                 numStudents: numStudents,
-                showSubGroupsView: !teacherCtrl.user!.admin,
+                showSubGroupsView: !controller.user!.admin,
               );
             },
           )

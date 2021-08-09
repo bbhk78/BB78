@@ -106,7 +106,6 @@ class StudentPerformanceWidget extends StatelessWidget {
                     itemBuilder: (BuildContext context, int attIndex) {
                       final StudentAttendanceDay day = currStudent.attendance.calendar[attIndex];
                       final int totalPoints = day.uniform.values.reduce(MathReducers.sum);
-                      final int maxPoints = day.uniform.values.length * 3;
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(
