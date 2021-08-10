@@ -35,6 +35,7 @@ class UserController extends GetxController {
 
   RxList<Student> _students = <Student>[].obs;
   List<Student> get students => _students.toList();
+  Stream<List<Student>> get studentsStream => _students.stream;
 
   // This stream is used for properly implementing the "Remember Me" functionality
   final Rx<UserStatus> _teacherStatus = UserStatus(isReady: false, hasData: false).obs;
@@ -85,7 +86,7 @@ class UserController extends GetxController {
     _updateTeacherStatus();
   }
 
-  Future<bool> addStudent({
+  Future<Student?> addStudent({
     required String groupId,
     required String subgroupId,
     required String name,
@@ -100,12 +101,12 @@ class UserController extends GetxController {
     );
 
     final bool opStatus = await Database.createStudent(newStudent);
-    return opStatus;
+    return opStatus ? newStudent : null;
   }
 
-  Future<bool> removeStudent(Student student) async {
+  Future<Student?> removeStudent(Student student) async {
     final bool opStatus = await Database.removeStudent(student);
-    return opStatus;
+    return opStatus ? student : null;
   }
 
   Future<bool> addTeacher({

@@ -35,7 +35,10 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
     'belt': 'Belt',
     'tie': 'Tie',
     'submit': 'Submit',
+    // TODO: get translation
     'save': 'Save',
+    // TODO: get translation
+    'cancel': 'Cancel',
     'settings': 'Settings',
     'about': 'About',
     'language': 'Language',
@@ -51,6 +54,7 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
     'loading': 'Loading...',
     'done': 'Done',
     'need all student attendance': 'You need to assign attendance for all students',
+    // TODO: get translation
     'need all teacher attendance': 'You need to assign attendance for all teachers',
     'not available': 'Not Available :(',
     'password required': 'Password required',
@@ -58,5 +62,9 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
     'group not found': 'Specified group does not exist!',
     'saving data': 'Saving data...',
     'update': 'Update',
+    // TODO: get translation
+    'add new student': 'Enter name of new student',
+    // TODO: get translation
+    'remove existing student': 'Are you sure you want to delete this student?'
   }
 );

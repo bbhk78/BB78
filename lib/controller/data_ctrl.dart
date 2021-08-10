@@ -1,6 +1,5 @@
 import 'package:boysbrigade/model/group.dart';
 import 'package:boysbrigade/model/subgroup.dart';
-import 'package:boysbrigade/model/teacher.dart';
 import 'package:boysbrigade/services/database.dart';
 import 'package:get/get.dart';
 

@@ -65,7 +65,7 @@ class Signup extends GetWidget<AuthController> {
                     borderRadius: BorderRadius.all(
                       Radius.circular(3),
                     ),
-                    borderSide: BorderSide(color: Colors.grey, width: 1),
+                    borderSide: BorderSide(color: Colors.grey),
                   ),
                   fillColor: Colors.grey[200],
                   filled: true,

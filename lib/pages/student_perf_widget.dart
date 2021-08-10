@@ -98,54 +98,55 @@ class StudentPerformanceWidget extends StatelessWidget {
               : const SizedBox.shrink()),
             Obx(() => showMoreDetails.value && hasAttendanceDays
               ? SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: currStudent.attendance.calendar.length,
-                    itemBuilder: (BuildContext context, int attIndex) {
-                      final StudentAttendanceDay day = currStudent.attendance.calendar[attIndex];
-                      final int totalPoints = day.uniform.values.reduce(MathReducers.sum);
+                height: 100,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: currStudent.attendance.calendar.length,
+                  itemBuilder: (BuildContext context, int attIndex) {
+                    final StudentAttendanceDay day = currStudent.attendance.calendar[attIndex];
+                    final int totalPoints = day.uniform.values.reduce(MathReducers.sum);
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 5
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 5
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              day.date.toDate().formatted('dd/MM'),
+                              style: const TextStyle(
+                                fontFamily: 'OpenSans Regular',
+                                fontSize: 18
+                              ),
+                            ),
+                            Text(
+                              day.status.name.tr,
+                              style: const TextStyle(
+                                fontFamily: 'OpenSans Regular',
+                                fontSize: 18
+                              ),
+                            ),
+                            Text(
+                              day.status == StudentAttendance.pe
+                                ? 'n/a'
+                                : '$totalPoints',
+                              style: const TextStyle(
+                                fontFamily: 'OpenSans Regular',
+                                fontSize: 18
+                              ),
+                            ),
+                          ],
                         ),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                day.date.toDate().formatted('dd/MM'),
-                                style: const TextStyle(
-                                  fontFamily: 'OpenSans Regular',
-                                  fontSize: 18
-                                ),
-                              ),
-                              Text(
-                                day.status.name.tr,
-                                style: const TextStyle(
-                                  fontFamily: 'OpenSans Regular',
-                                  fontSize: 18
-                                ),
-                              ),
-                              Text(
-                                day.status == StudentAttendance.pe
-                                  ? 'n/a'
-                                  : '$totalPoints',
-                                style: const TextStyle(
-                                  fontFamily: 'OpenSans Regular',
-                                  fontSize: 18
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-                )
+                      ),
+                    );
+                  }
+                ),
+              )
               : const SizedBox.shrink())
           ],
         ),

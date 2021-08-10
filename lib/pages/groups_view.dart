@@ -39,13 +39,9 @@ class GroupsView extends GetWidget<UserController> {
             ),
             itemBuilder: (BuildContext context, int index) {
               final Group currGroup = sortedGroups[index];
-              final int numStudents = controller.students
-                .where((Student student) => student.groupId == currGroup.id)
-                .length;
 
               return GroupCardWidget(
                 group: currGroup,
-                numStudents: numStudents,
                 showSubGroupsView: !controller.user!.admin,
               );
             },
@@ -56,60 +52,72 @@ class GroupsView extends GetWidget<UserController> {
   }
 }
 
-class GroupCardWidget extends StatelessWidget {
+class GroupCardWidget extends GetWidget<UserController> {
   final Group group;
-  // final Color tileColor;
-  final int numStudents;
   final bool showSubGroupsView;
+  final RxInt numStudents = 0.obs;
 
-  const GroupCardWidget({
+  GroupCardWidget({
     Key? key,
     required this.group,
-    // required this.tileColor,
-    required this.numStudents,
     required this.showSubGroupsView,
   }) : super(key: key);
 
+  void updateNumStudents() {
+    numStudents.value = controller.students
+      .where((Student student) => student.groupId == group.id)
+      .length;
+  }
+
   @override
-  Widget build(BuildContext context) => InkWell(
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            group.name,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 30,
-              fontFamily: 'OpenSans SemiBold',
-            ),
-          ),
-          const SizedBox(height: 25),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                '# of students'.tr + numStudents.toString(),
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 13,
-                  fontFamily: 'OpenSans SemiBold',
-                ),
+  Widget build(BuildContext context) {
+    updateNumStudents();
+
+    return InkWell(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              group.name,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 30,
+                fontFamily: 'OpenSans SemiBold',
               ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 25),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Obx(() => Text(
+                  '# of students'.tr + numStudents.toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 13,
+                    fontFamily: 'OpenSans SemiBold',
+                  ),
+                )),
+              ],
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: group.tileColor,
+        ),
       ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: group.tileColor,
-      ),
-    ),
-    onTap: () => Get.to<void>(
-      () => showSubGroupsView
-        ? SubGroupsView(group: group)
-        : GroupPerformance(group: group)
-    ),
-  );
+      onTap: () async {
+        await Get.to<void>(
+          () => showSubGroupsView
+            ? SubGroupsView(group: group)
+            : GroupPerformance(group: group)
+        );
+
+        updateNumStudents();
+        numStudents.refresh();
+      },
+    );
+  }
 }

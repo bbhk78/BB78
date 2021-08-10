@@ -37,6 +37,8 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'submit': '提交',
     // TODO: get translation
     'save': 'Save',
+    // TODO: get translation
+    'cancel': 'Cancel',
     'settings': '設定',
     'about': '關於',
     'language': '語言',
@@ -60,5 +62,9 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'group not found': '此組別暫不存在',
     'saving data': '數據儲存中...',
     'update': '更新',
+    // TODO: get translation
+    'add new student': 'Enter name of new student',
+    // TODO: get translation
+    'remove existing student': 'Are you sure you want to delete this student?',
   }
 );

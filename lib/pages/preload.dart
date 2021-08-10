@@ -20,7 +20,7 @@ class Preload extends GetWidget<AuthController> {
     // fully populated by the streams.
     return StreamBuilder<UserStatus?>(
       stream: userCtrl.teacherStatusStream,
-      builder: (BuildContext context, AsyncSnapshot<Object?> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<UserStatus?> snapshot) {
         isUserReady.value = controller.user?.uid != null && userCtrl.hasData;
         return Obx(() => isUserReady.value ? Home() : Login());
       },

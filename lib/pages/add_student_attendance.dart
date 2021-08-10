@@ -192,7 +192,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
         flex: 2,
         fit: FlexFit.tight,
         child: IconButton(
-          alignment: FractionalOffset.centerRight,
+          alignment: FractionalOffset.center,
           icon: const Icon(
             Icons.edit_outlined,
             color: Colors.grey,

@@ -1,12 +1,9 @@
 import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/services/localization.dart';
 import 'package:get/get.dart';
-
 import 'package:boysbrigade/controller/user_ctrl.dart';
-
 import 'package:boysbrigade/constants/langs.dart';
-
-import 'controller/data_ctrl.dart';
+import 'package:boysbrigade/controller/data_ctrl.dart';
 
 class GlobalBindings extends Bindings {
   @override

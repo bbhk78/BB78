@@ -48,7 +48,8 @@ class GuiUtils {
   static PreferredSize simpleAppBar({
     String title = '',
     String subtitle = '',
-    bool showBackButton = false
+    bool showBackButton = false,
+    VoidCallback? onBackButtonPressed,
   }) => PreferredSize(
     preferredSize: const Size.fromHeight(120),
     child: AppBar(
@@ -61,7 +62,7 @@ class GuiUtils {
             if (showBackButton)
               IconButton(
                 icon: const Icon(Icons.arrow_back),
-                onPressed: () => Get.back<void>(),
+                onPressed: onBackButtonPressed ?? () => Get.back<void>(),
                 iconSize: 30,
                 padding: const EdgeInsets.only(right: 25),
               ),

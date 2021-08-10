@@ -1,4 +1,3 @@
-import 'package:boysbrigade/controller/auth_ctrl.dart';
 import 'package:boysbrigade/controller/user_ctrl.dart';
 import 'package:boysbrigade/pages/add_student_attendance.dart';
 import 'package:boysbrigade/pages/add_teacher_attendance.dart';
