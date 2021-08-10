@@ -23,7 +23,7 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'absent': '缺席',
     // TODO: get translation
     'pe': 'PE',
-    'attendance': '出席率',
+    'attendance': '出席狀況',
     'uniform': '制服',
     'marks': '分數',
     'cap': '鴨嘴帽',

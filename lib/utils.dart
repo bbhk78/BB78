@@ -106,11 +106,13 @@ class GuiUtils {
 
 class FutureUtils {
   static Future<void> waitFor(bool Function() func, Duration duration) async {
-    while (!func()) await Future<void>.delayed(duration);
+    while (!func())
+      await Future<void>.delayed(duration);
   }
 
   static Future<void> waitForAsync(Future<bool> Function() func, Duration duration) async {
-    while (!(await func())) await Future<void>.delayed(duration);
+    while (!(await func()))
+      await Future<void>.delayed(duration);
   }
 }
 

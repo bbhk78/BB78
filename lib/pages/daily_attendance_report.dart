@@ -251,7 +251,9 @@ class StudentAttendanceRowWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
-              '$countedPoints / $maxPoints',
+              day.status == StudentAttendance.pe
+                ? 'n/a'.tr
+                : '$countedPoints / $maxPoints',
               style: TextStyle(
                 fontSize: 18,
                 color: countedPoints == 0 ? Colors.grey : Colors.black
