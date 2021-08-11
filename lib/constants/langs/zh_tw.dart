@@ -21,8 +21,7 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'late': '遲到',
     'sick': '請假',
     'absent': '缺席',
-    // TODO: get translation
-    'pe': 'PE',
+    'pe': '活動服',
     'attendance': '出席狀況',
     'uniform': '制服',
     'marks': '分數',
@@ -35,10 +34,8 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'belt': '皮帶',
     'tie': '領帶',
     'submit': '提交',
-    // TODO: get translation
-    'save': 'Save',
-    // TODO: get translation
-    'cancel': 'Cancel',
+    'save': '儲存',
+    'cancel': '取消',
     'settings': '設定',
     'about': '關於',
     'language': '語言',
@@ -54,17 +51,14 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
     'loading': '載入中',
     'done': '完成',
     'need all student attendance': '請輸入所有隊員的出席率',
-    // TODO: get translation
-    'need all teacher attendance': 'You need to assign attendance for all teachers',
+    'need all teacher attendance': '導師出席狀況未完成',
     'not available': '沒有數據 :(',
     'password required': '請輸入密碼',
     'login failed': '登入失敗',
     'group not found': '此組別暫不存在',
     'saving data': '數據儲存中...',
     'update': '更新',
-    // TODO: get translation
-    'add new student': 'Enter name of new student',
-    // TODO: get translation
-    'remove existing student': 'Are you sure you want to delete this student?',
+    'add new student': '新增隊員',
+    'remove existing student': '您確定是否要移除此隊員？',
   }
 );
