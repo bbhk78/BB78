@@ -11,8 +11,9 @@ class LocalizationTranslations extends Translations {
 
   @override
   Map<String, Map<String, String>> get keys => <String, Map<String, String>>{
-    for (LocaleBundle bundle in supportedLangs) bundle.locale.toString() : bundle.trMap
-  };
+        for (LocaleBundle bundle in supportedLangs)
+          bundle.locale.toString(): bundle.trMap
+      };
 }
 
 class LocalizationService extends GetxController {
@@ -21,7 +22,9 @@ class LocalizationService extends GetxController {
   late LocalizationTranslations translations;
 
   List<LocaleBundle> get availableLangs => supportedLanguages;
-  List<Locale> get availableLocales => availableLangs.map<Locale>((LocaleBundle bundle) => bundle.locale).toList();
+  List<Locale> get availableLocales => availableLangs
+      .map<Locale>((LocaleBundle bundle) => bundle.locale)
+      .toList();
   Locale get defaultLocale => currentLang.locale;
   Locale get fallbackLocale => fallbackLang.locale;
 
@@ -33,23 +36,22 @@ class LocalizationService extends GetxController {
     translations = LocalizationTranslations(supportedLanguages);
 
     defaultLang = supportedLanguages.firstWhere(
-      (LocaleBundle lang) => lang == defaultLocale,
-      orElse: () => throw Exception('Default locale not part of supported locales: $defaultLocale')
-    );
+        (LocaleBundle lang) => lang == defaultLocale,
+        orElse: () => throw Exception(
+            'Default locale not part of supported locales: $defaultLocale'));
 
     fallbackLang = supportedLanguages.firstWhere(
-      (LocaleBundle lang) => lang == fallbackLocale,
-      orElse: () => throw Exception('Fallback locale not part of supported locales: $fallbackLocale')
-    );
+        (LocaleBundle lang) => lang == fallbackLocale,
+        orElse: () => throw Exception(
+            'Fallback locale not part of supported locales: $fallbackLocale'));
 
     currentLang = defaultLang;
   }
 
   void changeLocale(Locale newLocale) {
     final LocaleBundle existingBundle = availableLangs.firstWhere(
-      (LocaleBundle bundle) => bundle.locale == newLocale,
-      orElse: () => currentLang
-    );
+        (LocaleBundle bundle) => bundle.locale == newLocale,
+        orElse: () => currentLang);
 
     if (existingBundle != currentLang) {
       currentLang = existingBundle;

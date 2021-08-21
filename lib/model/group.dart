@@ -25,24 +25,25 @@ class Group extends Equatable {
   });
 
   Map<String, dynamic> toFirestore() => <String, dynamic>{
-    'name': name,
-    'sub-groups': subGroupIds,
-    'uniform-class': uniformClass,
-    'teachers': teacherIds,
-    'sort-order': sortOrder,
-    'tile-color': tileColor.toString(),
-  };
+        'name': name,
+        'sub-groups': subGroupIds,
+        'uniform-class': uniformClass,
+        'teachers': teacherIds,
+        'sort-order': sortOrder,
+        'tile-color': tileColor.toString(),
+      };
 
   Group.fromFirestore(DocumentSnapshot<Map<String, dynamic>> document)
-    : id = document.id,
-      name = document.data()!['name'] as String,
-      subGroupIds = TypeUtils.parseList<String>(document.data()!['sub-groups']),
-      uniformClass = TypeUtils.parseList<String>(document.data()!['uniform-class']),
-      teacherIds = TypeUtils.parseList<String>(document.data()!['teachers']),
-      sortOrder = document.data()!['sort-order'] as int,
-      tileColor = Color(int.parse(
-        (document.data()!['tile-color'] as String).replaceAll('#', '0xff')
-      ));
+      : id = document.id,
+        name = document.data()!['name'] as String,
+        subGroupIds =
+            TypeUtils.parseList<String>(document.data()!['sub-groups']),
+        uniformClass =
+            TypeUtils.parseList<String>(document.data()!['uniform-class']),
+        teacherIds = TypeUtils.parseList<String>(document.data()!['teachers']),
+        sortOrder = document.data()!['sort-order'] as int,
+        tileColor = Color(int.parse((document.data()!['tile-color'] as String)
+            .replaceAll('#', '0xff')));
 
   @override
   List<Object> get props => <Object>[id, name];

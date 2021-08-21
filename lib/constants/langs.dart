@@ -4,7 +4,8 @@ import 'package:boysbrigade/constants/langs/zh_tw.dart';
 
 class LangConstants {
   static const List<LocaleBundle> SUPPORTED_LOCALES = <LocaleBundle>[
-    EN_US_BUNDLE, ZH_TW_BUNDLE
+    EN_US_BUNDLE,
+    ZH_TW_BUNDLE
   ];
 
   static const LocaleBundle DEFAULT_LOCALE = EN_US_BUNDLE;
