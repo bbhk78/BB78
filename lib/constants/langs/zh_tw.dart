@@ -51,7 +51,7 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
       'invalid email': '電郵地址',
       'loading': '載入中',
       'done': '完成',
-      'need all student attendance': '請輸入所有隊員的出席率',
+      'prefer all student attendance': '並非所有學生的出席狀況都已填寫，你是否確定要提交？',
       'need all teacher attendance': '導師出席狀況未完成',
       'not available': '沒有數據 :(',
       'password required': '請輸入密碼',
@@ -61,4 +61,5 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
       'update': '更新',
       'add new student': '新增隊員',
       'remove existing student': '您確定是否要移除此隊員？',
+      'nn': '無需',
     });

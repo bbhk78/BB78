@@ -104,7 +104,7 @@ class AddStudentAttendance extends GetWidget<UserController> {
 
               if (!isValid)
                 await Get.defaultDialog<void>(
-                    middleText: 'need all student attendance'.tr,
+                    middleText: 'prefer all student attendance'.tr,
                     radius: 0,
                     textConfirm: 'ok'.tr,
                     barrierDismissible: false,

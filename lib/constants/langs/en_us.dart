@@ -51,8 +51,8 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
       'invalid email': 'Invalid email',
       'loading': 'Loading...',
       'done': 'Done',
-      'need all student attendance':
-          'You need to assign attendance for all students',
+      'prefer all student attendance':
+          'Not all student attendance has been filled out. Are you sure you want to submit?',
       'need all teacher attendance':
           'You need to assign attendance for all teachers',
       'not available': 'Not Available :(',
@@ -62,5 +62,7 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
       'saving data': 'Saving data...',
       'update': 'Update',
       'add new student': 'Enter name of new student',
-      'remove existing student': 'Are you sure you want to delete this student?'
+      'remove existing student':
+          'Are you sure you want to delete this student?',
+      'nn': 'No Need',
     });
