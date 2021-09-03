@@ -16,8 +16,16 @@ class AddTeacherAttendance extends GetWidget<UserController> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Group> groups = controller.groups;
+    final List<Teacher> teachers = controller.teachers..sort((Teacher a, Teacher b) {
+      final Group groupA = groups.firstWhere((Group group) => a.groupId == group.id);
+      final Group groupB = groups.firstWhere((Group group) => b.groupId == group.id);
+      return groupA.sortOrder.compareTo(groupB.sortOrder);
+    });
+
     final Map<Teacher, TeacherAttendanceDay> todayRollcall =
-        Map<Teacher, TeacherAttendanceDay>.fromEntries(controller.teachers.map(
+        Map<Teacher, TeacherAttendanceDay>.fromEntries(teachers
+            .map(
             (Teacher teacher) => MapEntry<Teacher, TeacherAttendanceDay>(
                 teacher,
                 teacher.attendance.calendar.firstWhere(
@@ -42,10 +50,10 @@ class AddTeacherAttendance extends GetWidget<UserController> {
               padding: const EdgeInsets.only(bottom: 10),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.groups.length,
+              itemCount: groups.length,
               itemBuilder: (BuildContext context, int groupIndex) {
-                final Group currGroup = controller.groups[groupIndex];
-                final List<Teacher> teachersList = controller.teachers
+                final Group currGroup = groups[groupIndex];
+                final List<Teacher> teachersList = teachers
                     .where((Teacher teacher) => teacher.groupId == currGroup.id)
                     .toList();
 

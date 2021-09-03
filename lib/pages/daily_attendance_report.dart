@@ -21,7 +21,12 @@ class DailyAttendanceReport extends GetWidget<UserController> {
     final List<Group> groups = controller.groups;
     final List<SubGroup> subgroups = controller.subgroups;
     final List<Student> students = controller.students;
-    final List<Teacher> teachers = controller.teachers;
+    final List<Teacher> teachers = controller.teachers
+      ..sort((Teacher a, Teacher b) {
+        final Group groupA = groups.firstWhere((Group group) => a.groupId == group.id);
+        final Group groupB = groups.firstWhere((Group group) => b.groupId == group.id);
+        return groupA.sortOrder.compareTo(groupB.sortOrder);
+      });
 
     // First construct student views
     final List<Widget> tabs = groups

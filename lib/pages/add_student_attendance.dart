@@ -102,23 +102,27 @@ class AddStudentAttendance extends GetWidget<UserController> {
                       day.status == StudentAttendance.unknown)
                   .isEmpty;
 
-              if (!isValid)
-                await Get.defaultDialog<void>(
+              if (!isValid) {
+                final bool? shouldSave = await Get.defaultDialog<bool>(
                     middleText: 'prefer all student attendance'.tr,
                     radius: 0,
                     textConfirm: 'ok'.tr,
                     barrierDismissible: false,
                     confirmTextColor: Colors.black,
                     buttonColor: Colors.grey.shade300,
-                    onConfirm: () => Get.back<void>());
-              else {
-                await Get.dialog<void>(FutureProgressDialog(
-                  controller.addStudentAttendanceUpdate(todayRollcall),
-                  message: Text('saving data'.tr),
-                ));
+                    onConfirm: () => Get.back<bool>(result: true),
+                    onCancel: () => Get.back<bool>(result: false));
 
-                Get.back<void>();
+                if (!shouldSave!)
+                  return;
               }
+
+              await Get.dialog<void>(FutureProgressDialog(
+                controller.addStudentAttendanceUpdate(todayRollcall),
+                message: Text('saving data'.tr),
+              ));
+
+              Get.back<void>();
             },
             child: Text(
               isUpdating ? 'update'.tr : 'submit'.tr,
