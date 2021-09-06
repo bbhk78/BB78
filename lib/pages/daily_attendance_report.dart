@@ -195,8 +195,11 @@ class StudentAttendanceRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final StudentAttendance attendanceStatus = day.status;
-    final int countedPoints = day.uniform.isEmpty ? 0 : day.uniform.values.reduce(MathReducers.sum);
-    final int maxPoints = day.uniform.isEmpty ? 0 : day.uniform.values.length * MAX_POINTS_PER_UNIFORM_PART;
+    final int countedPoints =
+        day.uniform.isEmpty ? 0 : day.uniform.values.reduce(MathReducers.sum);
+    final int maxPoints = day.uniform.isEmpty
+        ? 0
+        : day.uniform.values.length * MAX_POINTS_PER_UNIFORM_PART;
 
     return Row(
       children: <Widget>[

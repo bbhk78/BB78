@@ -21,8 +21,7 @@ class AddTeacherAttendance extends GetWidget<UserController> {
     final List<Teacher> teachers = controller.teachers;
 
     final Map<Teacher, TeacherAttendanceDay> todayRollcall =
-        Map<Teacher, TeacherAttendanceDay>.fromEntries(teachers
-            .map(
+        Map<Teacher, TeacherAttendanceDay>.fromEntries(teachers.map(
             (Teacher teacher) => MapEntry<Teacher, TeacherAttendanceDay>(
                 teacher,
                 teacher.attendance.calendar.firstWhere(

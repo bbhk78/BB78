@@ -28,7 +28,8 @@ extension StudentAttendanceExt on StudentAttendance {
       status == StudentAttendance.present || status == StudentAttendance.late;
 
   static bool isExcused(StudentAttendance status) =>
-      status == StudentAttendance.unknown || status == StudentAttendance.pe ||
+      status == StudentAttendance.unknown ||
+      status == StudentAttendance.pe ||
       status == StudentAttendance.nn;
 }
 

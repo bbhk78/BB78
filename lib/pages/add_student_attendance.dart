@@ -113,8 +113,7 @@ class AddStudentAttendance extends GetWidget<UserController> {
                     onConfirm: () => Get.back<bool>(result: true),
                     onCancel: () => Get.back<bool>(result: false));
 
-                if (!shouldSave!)
-                  return;
+                if (!shouldSave!) return;
               }
 
               await Get.dialog<void>(FutureProgressDialog(

@@ -50,8 +50,9 @@ class Student extends Equatable {
         MAX_POINTS_PER_UNIFORM_PART;
 
     final int countedPoints = countedDays
-        .map((StudentAttendanceDay day) =>
-            day.uniform.values.reduce(MathReducers.sum))
+        .map((StudentAttendanceDay day) => day.uniform.isEmpty
+            ? 0
+            : day.uniform.values.reduce(MathReducers.sum))
         .reduce(MathReducers.sum);
 
     return (countedPoints / totalPoints) * 100;
