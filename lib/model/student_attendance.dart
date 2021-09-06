@@ -14,11 +14,6 @@ class StudentAttendanceDay {
       : date = Timestamp.fromDate(DateTimeHelper.today()),
         status = StudentAttendance.unknown;
 
-  StudentAttendanceDay.simple({
-    required this.date,
-    required this.status,
-  });
-
   StudentAttendanceDay({
     required this.date,
     required this.status,

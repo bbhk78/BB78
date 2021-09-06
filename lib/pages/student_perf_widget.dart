@@ -125,8 +125,8 @@ class StudentPerformanceWidget extends StatelessWidget {
                                         fontSize: 18),
                                   ),
                                   Text(
-                                    day.status == StudentAttendance.pe
-                                        ? 'n/a'
+                                    StudentAttendanceExt.isExcused(day.status)
+                                        ? 'n/a'.tr
                                         : '$totalPoints',
                                     style: const TextStyle(
                                         fontFamily: 'OpenSans Regular',

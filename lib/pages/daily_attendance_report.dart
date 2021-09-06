@@ -18,15 +18,11 @@ class DailyAttendanceReport extends GetWidget<UserController> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Group> groups = controller.groups;
+    final List<Group> groups = controller.groups
+      ..sort((Group a, Group b) => a.sortOrder.compareTo(b.sortOrder));
     final List<SubGroup> subgroups = controller.subgroups;
     final List<Student> students = controller.students;
-    final List<Teacher> teachers = controller.teachers
-      ..sort((Teacher a, Teacher b) {
-        final Group groupA = groups.firstWhere((Group group) => a.groupId == group.id);
-        final Group groupB = groups.firstWhere((Group group) => b.groupId == group.id);
-        return groupA.sortOrder.compareTo(groupB.sortOrder);
-      });
+    final List<Teacher> teachers = controller.teachers;
 
     // First construct student views
     final List<Widget> tabs = groups
@@ -199,9 +195,8 @@ class StudentAttendanceRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final StudentAttendance attendanceStatus = day.status;
-    final int countedPoints = day.uniform.values.reduce(MathReducers.sum);
-    final int maxPoints =
-        day.uniform.values.length * MAX_POINTS_PER_UNIFORM_PART;
+    final int countedPoints = day.uniform.isEmpty ? 0 : day.uniform.values.reduce(MathReducers.sum);
+    final int maxPoints = day.uniform.isEmpty ? 0 : day.uniform.values.length * MAX_POINTS_PER_UNIFORM_PART;
 
     return Row(
       children: <Widget>[
@@ -241,7 +236,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
-              day.status == StudentAttendance.pe
+              StudentAttendanceExt.isExcused(day.status)
                   ? 'n/a'.tr
                   : '$countedPoints / $maxPoints',
               style: TextStyle(

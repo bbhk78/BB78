@@ -16,12 +16,9 @@ class AddTeacherAttendance extends GetWidget<UserController> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Group> groups = controller.groups;
-    final List<Teacher> teachers = controller.teachers..sort((Teacher a, Teacher b) {
-      final Group groupA = groups.firstWhere((Group group) => a.groupId == group.id);
-      final Group groupB = groups.firstWhere((Group group) => b.groupId == group.id);
-      return groupA.sortOrder.compareTo(groupB.sortOrder);
-    });
+    final List<Group> groups = controller.groups
+      ..sort((Group a, Group b) => a.sortOrder.compareTo(b.sortOrder));
+    final List<Teacher> teachers = controller.teachers;
 
     final Map<Teacher, TeacherAttendanceDay> todayRollcall =
         Map<Teacher, TeacherAttendanceDay>.fromEntries(teachers
