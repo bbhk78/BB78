@@ -142,44 +142,30 @@ class DailyAttendanceReport extends GetWidget<UserController> {
 
 class StudentGroupReportWidget extends StatelessWidget {
   final List<Student> students;
-  final int _studentsWithDays;
 
-  StudentGroupReportWidget({
+  const StudentGroupReportWidget({
     Key? key,
     required this.students,
-  })  : _studentsWithDays = students
-            .map((Student student) => student.todayAttendance)
-            .where((StudentAttendanceDay? day) => day != null)
-            .length,
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (students.length != _studentsWithDays)
-            Center(
-                child: Text('not available'.tr,
-                    // TODO: Make the text vertically center on the page
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'OpenSans SemiBold',
-                    )))
-          else
-            ListView.builder(
-              padding: const EdgeInsets.only(bottom: 10),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: students.length,
-              itemBuilder: (BuildContext context, int studentIndex) {
-                final Student currStudent = students[studentIndex];
-                final StudentAttendanceDay currDay =
-                    currStudent.todayAttendance!;
+          ListView.builder(
+            padding: const EdgeInsets.only(bottom: 10),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: students.length,
+            itemBuilder: (BuildContext context, int studentIndex) {
+              final Student currStudent = students[studentIndex];
+              final StudentAttendanceDay currDay =
+                  currStudent.todayAttendance ?? StudentAttendanceDay.unknown();
 
-                return StudentAttendanceRowWidget(
-                    student: currStudent, day: currDay);
-              },
-            )
+              return StudentAttendanceRowWidget(
+                  student: currStudent, day: currDay);
+            },
+          )
         ],
       );
 }
@@ -256,44 +242,30 @@ class StudentAttendanceRowWidget extends StatelessWidget {
 
 class TeacherGroupReportWidget extends StatelessWidget {
   final List<Teacher> teachers;
-  final int _teachersWithDays;
 
   TeacherGroupReportWidget({
     Key? key,
     required this.teachers,
-  })  : _teachersWithDays = teachers
-            .map((Teacher teacher) => teacher.todayAttendance)
-            .where((TeacherAttendanceDay? day) => day != null)
-            .length,
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (teachers.length != _teachersWithDays)
-            Center(
-                child: Text('not available'.tr,
-                    // TODO: Make the text vertically center on the page
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'OpenSans SemiBold',
-                    )))
-          else
-            ListView.builder(
-              padding: const EdgeInsets.only(bottom: 10),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: teachers.length,
-              itemBuilder: (BuildContext context, int teacherIndex) {
-                final Teacher currTeacher = teachers[teacherIndex];
-                final TeacherAttendanceDay currDay =
-                    currTeacher.todayAttendance!;
+          ListView.builder(
+            padding: const EdgeInsets.only(bottom: 10),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: teachers.length,
+            itemBuilder: (BuildContext context, int teacherIndex) {
+              final Teacher currTeacher = teachers[teacherIndex];
+              final TeacherAttendanceDay currDay =
+                  currTeacher.todayAttendance ?? TeacherAttendanceDay.unknown();
 
-                return TeacherAttendanceRowWidget(
-                    teacher: currTeacher, day: currDay);
-              },
-            )
+              return TeacherAttendanceRowWidget(
+                  teacher: currTeacher, day: currDay);
+            },
+          )
         ],
       );
 }

@@ -7,6 +7,7 @@ import 'package:boysbrigade/model/teacher_attendance.dart';
 import 'package:boysbrigade/services/database.dart';
 import 'package:boysbrigade/controller/data_ctrl.dart';
 import 'package:boysbrigade/utils.dart';
+import 'package:boysbrigade/constants/data.dart';
 
 import 'package:get/get.dart';
 
@@ -144,6 +145,8 @@ class UserController extends GetxController {
     studentsToDays
       ..removeWhere((Student student, StudentAttendanceDay day) =>
           !day.date.toDate().isToday())
+      ..removeWhere((Student student, StudentAttendanceDay day) =>
+          day.status == StudentAttendance.unknown)
       ..forEach((Student student, StudentAttendanceDay day) {
         final int possibleTodayIndex = student.attendance.calendar.indexWhere(
             (StudentAttendanceDay day) => day.date.toDate().isToday());
