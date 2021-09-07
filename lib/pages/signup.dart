@@ -1,12 +1,45 @@
+import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/controller/auth_ctrl.dart';
+import 'package:boysbrigade/controller/user_ctrl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:get/get.dart';
+
+import 'package:boysbrigade/utils.dart';
 
 class Signup extends GetWidget<AuthController> {
   Signup({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+
+  Future<String?> attemptLogin(String email, String password) async {
+    String? errMessage;
+    try {
+      await controller.loginTeacher(email, password);
+
+      final UserController userCtrl = Get.find<UserController>()
+        ..readonly = true;
+
+      // HACK: This delayed checking loop is so that the rest of the teacher
+      // data has time to load in before we render the home page.
+
+      // This also "solves" the issue where the user has *just* logged in
+      // but the teacher data isn't loaded in as of yet.
+
+      // NOTE: This is most probably a bad practice, but it works for now
+      await FutureUtils.waitFor(
+          () => userCtrl.hasData, const Duration(milliseconds: 50));
+      errMessage = null;
+    } on FirebaseAuthException catch (err) {
+      errMessage = err.message ?? 'Unknown error code: ${err.code}!';
+    } on Exception catch (err) {
+      errMessage = err.toString();
+    }
+
+    return errMessage;
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -25,7 +58,6 @@ class Signup extends GetWidget<AuthController> {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
-                    // initialValue: email.value,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(3)),
@@ -40,7 +72,6 @@ class Signup extends GetWidget<AuthController> {
                           vertical: 15, horizontal: 20),
                     ),
                     keyboardType: TextInputType.emailAddress,
-                    // onChanged: (String newValue) => email.value = newValue,
                     validator: ValidationBuilder()
                         .required('email required'.tr)
                         .email('invalid email'.tr)
@@ -48,7 +79,6 @@ class Signup extends GetWidget<AuthController> {
                   ),
                   const SizedBox(height: 15),
                   TextFormField(
-                    // initialValue: password.value,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(
@@ -64,7 +94,6 @@ class Signup extends GetWidget<AuthController> {
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 15, horizontal: 20),
                     ),
-                    // onChanged: (String newValue) => password.value = newValue,
                     obscureText: true,
                     validator: ValidationBuilder()
                         .required('password required'.tr)
@@ -72,17 +101,30 @@ class Signup extends GetWidget<AuthController> {
                   ),
                   const SizedBox(height: 30),
                   RaisedButton(
-                    child: const Text(
-                      'Signup',
-                      style: TextStyle(fontSize: 16),
+                    child: Text(
+                      'signup'.tr,
+                      style: const TextStyle(fontSize: 16),
                     ),
                     shape: const RoundedRectangleBorder(),
                     color: Colors.black,
                     textColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         vertical: 15, horizontal: 20),
-                    onPressed: () {
-                      Get.back<void>();
+                    onPressed: () async {
+                      if (loginFormKey.currentState!.validate()) {
+                        final String? errMessage =
+                        await Get.dialog<String?>(FutureProgressDialog(
+                          attemptLogin(TEST_EMAIL, TEST_PASSWORD),
+                          message: Text('loading'.tr),
+                        ));
+
+                        if (errMessage != null) {
+                          Get.rawSnackbar(
+                              title: 'login failed'.tr, message: errMessage);
+                        } else {
+                          Get.back<void>();
+                        }
+                      }
                     },
                   ),
                 ],

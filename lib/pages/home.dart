@@ -65,7 +65,7 @@ class Home extends GetWidget<UserController> {
             ),
           ],
         ),
-        floatingActionButton: selectedTab.value == 0
+        floatingActionButton: selectedTab.value == 0 && !controller.readonly
             ? AddAttendanceFab(controller.user!.admin)
             : null));
   }

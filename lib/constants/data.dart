@@ -1,6 +1,9 @@
 const int MAX_POINTS_PER_UNIFORM_PART = 3;
 const int YEAR_OFFSET = 3;
 
+const String TEST_EMAIL = 'cs@bb78.com';
+const String TEST_PASSWORD = 'cs1234';
+
 enum StudentAttendance { unknown, present, late, sick, absent, pe, nn }
 
 extension StudentAttendanceExt on StudentAttendance {

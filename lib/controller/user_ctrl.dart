@@ -17,6 +17,10 @@ class UserStatus {
 }
 
 class UserController extends GetxController {
+  final RxBool _readonly = false.obs;
+  bool get readonly => _readonly.value;
+  set readonly(bool value) => _readonly.value = value;
+
   bool get isReady => user != null;
   bool get hasData =>
       isReady &&

@@ -37,7 +37,9 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-      Get.find<UserController>().clear();
+      Get.find<UserController>()
+        ..readonly = false
+        ..clear();
     } on FirebaseAuthException catch (err) {
       Get.snackbar<void>('Error signing out!', err.message ?? 'Unknown reason');
     }

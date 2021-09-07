@@ -22,10 +22,10 @@ class Login extends GetWidget<AuthController> {
 
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
-  Future<String?> attemptLogin() async {
+  Future<String?> attemptLogin(String email, String password) async {
     String? errMessage;
     try {
-      await controller.loginTeacher(email.value, password.value);
+      await controller.loginTeacher(email, password);
 
       final UserController userCtrl = Get.find<UserController>();
 
@@ -126,7 +126,7 @@ class Login extends GetWidget<AuthController> {
                       if (loginFormKey.currentState!.validate()) {
                         final String? errMessage =
                             await Get.dialog<String?>(FutureProgressDialog(
-                          attemptLogin(),
+                          attemptLogin(email.value, password.value),
                           message: Text('loading'.tr),
                         ));
 
@@ -137,15 +137,20 @@ class Login extends GetWidget<AuthController> {
                       }
                     },
                   ),
-                  const SizedBox(height: 30),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 10),
+                  const SizedBox(height: 10),
+                  RaisedButton(
+                    child: Text(
+                      'signup'.tr,
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    onPressed: () {
-                      Get.to<void>(() => Signup());
+                    shape: const RoundedRectangleBorder(),
+                    color: Colors.black,
+                    textColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 20),
+                    onPressed: () async {
+                      await Get.to<void>(() => Signup());
                     },
-                    child: const Text('Signup'),
                   ),
                 ],
               ),

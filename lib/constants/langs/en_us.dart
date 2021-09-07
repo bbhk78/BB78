@@ -65,4 +65,5 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
       'remove existing student':
           'Are you sure you want to delete this student?',
       'nn': 'No Need',
+      'signup': 'Signup',
     });
