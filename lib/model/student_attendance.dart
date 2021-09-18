@@ -11,13 +11,8 @@ class StudentAttendanceDay {
   Map<String, int> uniform = HashMap<String, int>();
 
   StudentAttendanceDay.unknown()
-    : date = Timestamp.fromDate(DateTimeHelper.today()),
-      status = StudentAttendance.unknown;
-
-  StudentAttendanceDay.simple({
-    required this.date,
-    required this.status,
-  });
+      : date = Timestamp.fromDate(DateTimeHelper.today()),
+        status = StudentAttendance.unknown;
 
   StudentAttendanceDay({
     required this.date,
@@ -26,33 +21,33 @@ class StudentAttendanceDay {
   });
 
   Map<String, dynamic> toFirestore() => <String, dynamic>{
-    'date': date,
-    'status': status.name,
-    'uniform': uniform
-  };
+        'date': date,
+        'status': status.name,
+        'uniform': uniform
+      };
 
   StudentAttendanceDay.fromFirestoreData(Map<String, dynamic> data)
-    : date = data['date'] as Timestamp,
-      status = StudentAttendanceExt.parse(data['status'] as String),
-      uniform = TypeUtils.parseHashMap<String, int>(data['uniform']);
+      : date = data['date'] as Timestamp,
+        status = StudentAttendanceExt.parse(data['status'] as String),
+        uniform = TypeUtils.parseHashMap<String, int>(data['uniform']);
 }
 
 class StudentAttendanceCalendar {
   List<StudentAttendanceDay> calendar = const <StudentAttendanceDay>[];
 
-  StudentAttendanceCalendar({ this.calendar = const <StudentAttendanceDay>[] });
+  StudentAttendanceCalendar({this.calendar = const <StudentAttendanceDay>[]});
 
   bool get hasUniformDays => calendar
-    .where((StudentAttendanceDay day) => day.status != StudentAttendance.pe)
-    .isNotEmpty;
+      .where((StudentAttendanceDay day) => day.status != StudentAttendance.pe)
+      .isNotEmpty;
 
-  List<dynamic> toFirestore() => calendar
-    .map((StudentAttendanceDay day) => day.toFirestore())
-    .toList();
+  List<dynamic> toFirestore() =>
+      calendar.map((StudentAttendanceDay day) => day.toFirestore()).toList();
 
   StudentAttendanceCalendar.fromFirestoreData(List<dynamic> data) {
-    calendar = data.map<StudentAttendanceDay>(
-      (dynamic day) => StudentAttendanceDay.fromFirestoreData(day as Map<String, dynamic>)
-    ).toList();
+    calendar = data
+        .map<StudentAttendanceDay>((dynamic day) =>
+            StudentAttendanceDay.fromFirestoreData(day as Map<String, dynamic>))
+        .toList();
   }
 }

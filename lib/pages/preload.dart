@@ -7,7 +7,7 @@ import 'package:boysbrigade/pages/home.dart';
 import 'package:boysbrigade/pages/login.dart';
 
 class Preload extends GetWidget<AuthController> {
-  const Preload({ Key? key }) : super(key: key);
+  const Preload({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

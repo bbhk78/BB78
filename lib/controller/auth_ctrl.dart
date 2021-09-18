@@ -4,7 +4,6 @@ import 'package:boysbrigade/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -22,25 +21,25 @@ class AuthController extends GetxController {
         final String? userEmail = user?.email;
 
         if (userEmail != null) {
-          final Teacher? currTeacher = await Database.getTeacherByEmail(userEmail);
+          final Teacher? currTeacher =
+              await Database.getTeacherByEmail(userEmail);
 
-          if (userCtrl.user?.id != currTeacher?.id)
-            userCtrl.user = currTeacher;
+          if (userCtrl.user?.id != currTeacher?.id) userCtrl.user = currTeacher;
         }
       });
   }
 
   Future<void> loginTeacher(String email, String password) async {
-    /*UserCredential _authResult = */await _auth.signInWithEmailAndPassword(
-      email: email.trim(),
-      password: password
-    );
+    /*UserCredential _authResult = */ await _auth.signInWithEmailAndPassword(
+        email: email.trim(), password: password);
   }
 
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-      Get.find<UserController>().clear();
+      Get.find<UserController>()
+        ..readonly = false
+        ..clear();
     } on FirebaseAuthException catch (err) {
       Get.snackbar<void>('Error signing out!', err.message ?? 'Unknown reason');
     }

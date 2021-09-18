@@ -9,21 +9,19 @@ import 'package:get/get.dart';
 import 'package:boysbrigade/utils.dart';
 
 class GroupsView extends GetWidget<UserController> {
-  const GroupsView({ Key? key }) : super(key: key);
+  const GroupsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<Group> sortedGroups = controller.groups..sort(
-      (Group a, Group b) => a.sortOrder.compareTo(b.sortOrder)
-    );
+    final List<Group> sortedGroups = controller.groups
+      ..sort((Group a, Group b) => a.sortOrder.compareTo(b.sortOrder));
 
     return Scaffold(
       appBar: GuiUtils.simpleAppBar(
-        title: 'half year'.tr,
-        subtitle: DateTime.now().month < 7
-          ? 'first half year'.tr
-          : 'second half year'.tr
-      ),
+          title: 'half year'.tr,
+          subtitle: DateTime.now().month < 7
+              ? 'first half year'.tr
+              : 'second half year'.tr),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -65,8 +63,8 @@ class GroupCardWidget extends GetWidget<UserController> {
 
   void updateNumStudents() {
     numStudents.value = controller.students
-      .where((Student student) => student.groupId == group.id)
-      .length;
+        .where((Student student) => student.groupId == group.id)
+        .length;
   }
 
   @override
@@ -92,13 +90,13 @@ class GroupCardWidget extends GetWidget<UserController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Obx(() => Text(
-                  '# of students'.tr + numStudents.toString(),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 13,
-                    fontFamily: 'OpenSans SemiBold',
-                  ),
-                )),
+                      '# of students'.tr + numStudents.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontFamily: 'OpenSans SemiBold',
+                      ),
+                    )),
               ],
             ),
           ],
@@ -109,11 +107,9 @@ class GroupCardWidget extends GetWidget<UserController> {
         ),
       ),
       onTap: () async {
-        await Get.to<void>(
-          () => showSubGroupsView
+        await Get.to<void>(() => showSubGroupsView
             ? SubGroupsView(group: group)
-            : GroupPerformance(group: group)
-        );
+            : GroupPerformance(group: group));
 
         updateNumStudents();
         numStudents.refresh();

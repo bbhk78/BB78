@@ -7,17 +7,26 @@ import 'package:boysbrigade/model/teacher_attendance.dart';
 import 'package:boysbrigade/services/database.dart';
 import 'package:boysbrigade/controller/data_ctrl.dart';
 import 'package:boysbrigade/utils.dart';
+import 'package:boysbrigade/constants/data.dart';
 
 import 'package:get/get.dart';
 
 class UserStatus {
   final bool isReady, hasData;
-  UserStatus({ required this.isReady, required this.hasData });
+  UserStatus({required this.isReady, required this.hasData});
 }
 
 class UserController extends GetxController {
+  final RxBool _readonly = false.obs;
+  bool get readonly => _readonly.value;
+  set readonly(bool value) => _readonly.value = value;
+
   bool get isReady => user != null;
-  bool get hasData => isReady && groups.isNotEmpty && teachers.isNotEmpty && students.isNotEmpty;
+  bool get hasData =>
+      isReady &&
+      groups.isNotEmpty &&
+      teachers.isNotEmpty &&
+      students.isNotEmpty;
 
   final Rxn<Teacher> _user = Rxn<Teacher>();
   Teacher? get user => _user.value;
@@ -38,36 +47,38 @@ class UserController extends GetxController {
   Stream<List<Student>> get studentsStream => _students.stream;
 
   // This stream is used for properly implementing the "Remember Me" functionality
-  final Rx<UserStatus> _teacherStatus = UserStatus(isReady: false, hasData: false).obs;
+  final Rx<UserStatus> _teacherStatus =
+      UserStatus(isReady: false, hasData: false).obs;
   Stream<UserStatus?> get teacherStatusStream => _teacherStatus.stream;
 
   set user(Teacher? value) {
-    if (user == value)
-      return;
+    if (user == value) return;
 
     _user.value = value;
 
     if (value != null) {
       final DataController dataCtrl = Get.find<DataController>();
-      groups = dataCtrl.groups.where(
-        (Group group) => value.admin ? true : group.id == value.groupId
-      ).toList();
+      groups = dataCtrl.groups
+          .where(
+              (Group group) => value.admin ? true : group.id == value.groupId)
+          .toList();
 
-      subgroups = dataCtrl.subgroups.where(
-        (SubGroup subgroup) => value.admin ? true : subgroup.groupId == value.groupId
-      ).toList();
+      subgroups = dataCtrl.subgroups
+          .where((SubGroup subgroup) =>
+              value.admin ? true : subgroup.groupId == value.groupId)
+          .toList();
 
       _teachers
         ..bindStream(
-          Database.teachersStream(value.admin ? null : groups.first.id)
-            .map((List<Teacher> teachers) => teachers.where(
-              (Teacher teacher) => teacher.id != value.id
-            ).toList())
-        )
+            Database.teachersStream(value.admin ? null : groups.first.id).map(
+                (List<Teacher> teachers) => teachers
+                    .where((Teacher teacher) => teacher.id != value.id)
+                    .toList()))
         ..listen((_) => _updateTeacherStatus());
 
       _students
-        ..bindStream(Database.studentsStream(value.admin ? null : groups.first.id))
+        ..bindStream(
+            Database.studentsStream(value.admin ? null : groups.first.id))
         ..listen((_) => _updateTeacherStatus());
     } else {
       _groups.close();
@@ -133,13 +144,16 @@ class UserController extends GetxController {
     return opStatus;
   }
 
-  Future<void> addStudentAttendanceUpdate(Map<Student, StudentAttendanceDay> studentsToDays) async {
+  Future<void> addStudentAttendanceUpdate(
+      Map<Student, StudentAttendanceDay> studentsToDays) async {
     studentsToDays
-      ..removeWhere((Student student, StudentAttendanceDay day) => !day.date.toDate().isToday())
+      ..removeWhere((Student student, StudentAttendanceDay day) =>
+          !day.date.toDate().isToday())
+      ..removeWhere((Student student, StudentAttendanceDay day) =>
+          day.status == StudentAttendance.unknown)
       ..forEach((Student student, StudentAttendanceDay day) {
         final int possibleTodayIndex = student.attendance.calendar.indexWhere(
-          (StudentAttendanceDay day) => day.date.toDate().isToday()
-        );
+            (StudentAttendanceDay day) => day.date.toDate().isToday());
 
         if (possibleTodayIndex != -1)
           student.attendance.calendar[possibleTodayIndex] = day;
@@ -151,13 +165,14 @@ class UserController extends GetxController {
     await Future.forEach<Student>(newStudents, Database.saveStudent);
   }
 
-  Future<void> addTeacherAttendanceUpdate(Map<Teacher, TeacherAttendanceDay> teacherToDays) async {
+  Future<void> addTeacherAttendanceUpdate(
+      Map<Teacher, TeacherAttendanceDay> teacherToDays) async {
     teacherToDays
-      ..removeWhere((Teacher teacher, TeacherAttendanceDay day) => !day.date.toDate().isToday())
+      ..removeWhere((Teacher teacher, TeacherAttendanceDay day) =>
+          !day.date.toDate().isToday())
       ..forEach((Teacher teacher, TeacherAttendanceDay day) {
         final int possibleTodayIndex = teacher.attendance.calendar.indexWhere(
-                (TeacherAttendanceDay day) => day.date.toDate().isToday()
-        );
+            (TeacherAttendanceDay day) => day.date.toDate().isToday());
 
         if (possibleTodayIndex != -1)
           teacher.attendance.calendar[possibleTodayIndex] = day;

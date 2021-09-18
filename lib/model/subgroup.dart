@@ -16,17 +16,14 @@ class SubGroup extends Equatable {
     required this.studentIds,
   });
 
-  Map<String, dynamic> toFirestore() => <String, dynamic>{
-    'name': name,
-    'group': groupId,
-    'students': studentIds
-  };
+  Map<String, dynamic> toFirestore() =>
+      <String, dynamic>{'name': name, 'group': groupId, 'students': studentIds};
 
   SubGroup.fromFirestore(DocumentSnapshot<Map<String, dynamic>> document)
-    : id = document.id,
-      name = document.data()!['name'] as String,
-      groupId = document.data()!['group'] as String,
-      studentIds = TypeUtils.parseList<String>(document.data()!['students']);
+      : id = document.id,
+        name = document.data()!['name'] as String,
+        groupId = document.data()!['group'] as String,
+        studentIds = TypeUtils.parseList<String>(document.data()!['students']);
 
   @override
   List<Object> get props => <Object>[id, name];

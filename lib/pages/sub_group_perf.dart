@@ -13,25 +13,22 @@ class SubGroupPerformance extends GetWidget<UserController> {
   final SubGroup subgroup;
   final Color tileColor;
 
-  const SubGroupPerformance({
-    required this.group,
-    required this.subgroup,
-    required this.tileColor,
-    Key? key
-  }) : super(key: key);
+  const SubGroupPerformance(
+      {required this.group,
+      required this.subgroup,
+      required this.tileColor,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final List<Student> students = controller.students
-      .where((Student student) => student.subgroupId == subgroup.id)
-      .toList();
+        .where((Student student) => student.subgroupId == subgroup.id)
+        .toList();
 
     return Scaffold(
       appBar: GuiUtils.simpleAppBar(
-        title: group.name,
-        subtitle: subgroup.name,
-        showBackButton: true
-      ),
+          title: group.name, subtitle: subgroup.name, showBackButton: true),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: ListView.builder(
@@ -40,14 +37,10 @@ class SubGroupPerformance extends GetWidget<UserController> {
           itemBuilder: (BuildContext context, int studIndex) {
             final Student currStudent = students[studIndex];
             return StudentPerformanceWidget(
-              student: currStudent,
-              tileColor: tileColor
-            );
+                student: currStudent, tileColor: tileColor);
           },
         ),
       ),
     );
   }
 }
-
-
