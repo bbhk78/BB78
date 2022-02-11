@@ -180,7 +180,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final StudentAttendance attendanceStatus = day.status;
+    final String attendanceStatus = day.status;
     final int countedPoints =
         day.uniform.isEmpty ? 0 : day.uniform.values.reduce(MathReducers.sum);
     final int maxPoints = day.uniform.isEmpty
@@ -202,17 +202,17 @@ class StudentAttendanceRowWidget extends StatelessWidget {
           ),
         ),
         Flexible(
-          flex: 3,
+          flex: 4,
           fit: FlexFit.tight,
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-              color: STATUS_COLORS[attendanceStatus.name],
+              color: STATUS_COLORS[attendanceStatus],
             ),
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Text(
-                attendanceStatus.name.tr,
+                attendanceStatus.tr,
                 style: const TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
@@ -225,7 +225,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
-              StudentAttendanceExt.isExcused(day.status)
+              AttendanceHelper.isExcused(day.status)
                   ? 'n/a'.tr
                   : '$countedPoints / $maxPoints',
               style: TextStyle(
@@ -243,7 +243,7 @@ class StudentAttendanceRowWidget extends StatelessWidget {
 class TeacherGroupReportWidget extends StatelessWidget {
   final List<Teacher> teachers;
 
-  TeacherGroupReportWidget({
+  const TeacherGroupReportWidget({
     Key? key,
     required this.teachers,
   }) : super(key: key);

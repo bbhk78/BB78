@@ -7,12 +7,12 @@ import 'package:boysbrigade/utils.dart';
 
 class StudentAttendanceDay {
   Timestamp date;
-  StudentAttendance status;
+  String status;
   Map<String, int> uniform = HashMap<String, int>();
 
   StudentAttendanceDay.unknown()
       : date = Timestamp.fromDate(DateTimeHelper.today()),
-        status = StudentAttendance.unknown;
+        status = UNKNOWN_ATTENDANCE;
 
   StudentAttendanceDay({
     required this.date,
@@ -22,13 +22,13 @@ class StudentAttendanceDay {
 
   Map<String, dynamic> toFirestore() => <String, dynamic>{
         'date': date,
-        'status': status.name,
+        'status': status,
         'uniform': uniform
       };
 
   StudentAttendanceDay.fromFirestoreData(Map<String, dynamic> data)
       : date = data['date'] as Timestamp,
-        status = StudentAttendanceExt.parse(data['status'] as String),
+        status = data['status'] as String,
         uniform = TypeUtils.parseHashMap<String, int>(data['uniform']);
 }
 
@@ -38,7 +38,7 @@ class StudentAttendanceCalendar {
   StudentAttendanceCalendar({this.calendar = const <StudentAttendanceDay>[]});
 
   bool get hasUniformDays => calendar
-      .where((StudentAttendanceDay day) => day.status != StudentAttendance.pe)
+      .where((StudentAttendanceDay day) => day.status != PE_ATTENDANCE)
       .isNotEmpty;
 
   List<dynamic> toFirestore() =>

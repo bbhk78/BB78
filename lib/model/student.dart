@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:boysbrigade/constants/data.dart';
 import 'package:boysbrigade/controller/data_ctrl.dart';
 import 'package:boysbrigade/model/group.dart';
@@ -25,14 +27,17 @@ class Student extends Equatable {
   });
 
   double get attendancePercent {
-    final int totalDays = attendance.calendar.length;
-    final int countedDays = attendance.calendar
-        .where((StudentAttendanceDay day) =>
-            StudentAttendanceExt.isPresent(day.status) ||
-            day.status == StudentAttendance.pe)
-        .length;
+    final DataController dataCtrl = Get.find<DataController>();
+    final Group currGroup =
+        dataCtrl.groups.firstWhere((Group group) => group.id == groupId);
 
-    return (countedDays / totalDays) * 100;
+    final int maxPointsPerDay = currGroup.attendanceInfo.values.reduce(max);
+    final int totalPoints = attendance.calendar.length * maxPointsPerDay;
+    final int countedPoints = attendance.calendar
+        .map((StudentAttendanceDay day) => currGroup.attendanceInfo[day.status]!)
+        .reduce(MathReducers.sum);
+
+    return (countedPoints / totalPoints) * 100;
   }
 
   double get uniformPercent {
@@ -41,7 +46,7 @@ class Student extends Equatable {
         dataCtrl.groups.firstWhere((Group group) => group.id == groupId);
 
     final List<StudentAttendanceDay> countedDays = attendance.calendar
-        .where((StudentAttendanceDay day) => day.status != StudentAttendance.pe)
+        .where((StudentAttendanceDay day) => day.status != PE_ATTENDANCE)
         .toList();
 
     final int totalPoints = countedDays.length *

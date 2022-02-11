@@ -109,7 +109,7 @@ class StudentPerformanceWidget extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 5),
                             child: AspectRatio(
-                              aspectRatio: 1,
+                              aspectRatio: 1.3,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -120,13 +120,16 @@ class StudentPerformanceWidget extends StatelessWidget {
                                         fontSize: 18),
                                   ),
                                   Text(
-                                    day.status.name.tr,
+                                    day.status.tr,
                                     style: const TextStyle(
                                         fontFamily: 'OpenSans Regular',
-                                        fontSize: 18),
+                                        fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                    // softWrap: false,
+                                    // overflow: TextOverflow.visible
                                   ),
                                   Text(
-                                    StudentAttendanceExt.isExcused(day.status)
+                                    AttendanceHelper.isExcused(day.status)
                                         ? 'n/a'.tr
                                         : '$totalPoints',
                                     style: const TextStyle(

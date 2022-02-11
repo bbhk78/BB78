@@ -8,18 +8,31 @@ import 'package:get/get.dart';
 
 import 'package:boysbrigade/utils.dart';
 
-List<DropdownMenuItem<StudentAttendance>> _attendanceStatusItems() =>
-    StudentAttendance.values
-        .map((StudentAttendance value) => DropdownMenuItem<StudentAttendance>(
-            value: value,
-            child: Text(
-              value.name.tr,
-              style: const TextStyle(
-                fontSize: 18,
-                fontFamily: 'OpenSans',
-              ),
-            )))
-        .toList();
+List<DropdownMenuItem<String>> _attendanceStatusItems(Group group) {
+  final MapEntry<String, int> unknownElement = group.attendanceInfo.entries
+      .firstWhere((MapEntry<String, int> e) => e.key.tr == '...');
+
+  final List<MapEntry<String, int>> entries = group.attendanceInfo.entries
+      .toList()
+      ..sort(
+        (MapEntry<String, int> a, MapEntry<String, int> b) =>
+            '${a.value} - ${a.key}'.compareTo('${b.value} - ${b.key}')
+      )
+      ..removeWhere((MapEntry<String, int> e) => e.key.tr == '...')
+      ..insert(0, unknownElement);
+
+  return entries
+      .map((MapEntry<String, int> entry) => DropdownMenuItem<String>(
+      value: entry.key,
+      child: Text(
+        entry.key != UNKNOWN_ATTENDANCE ? '${entry.key.tr} (${entry.value})' : entry.key.tr,
+        style: const TextStyle(
+          fontSize: 18,
+          fontFamily: 'OpenSans',
+        ),
+      )))
+      .toList();
+}
 
 List<DropdownMenuItem<int>> _uniformMarkItems() => 0
     .to(3)
@@ -92,18 +105,21 @@ class StudentAttendanceRecord extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w600),
                       ),
-                      Obx(() => DropdownButtonHideUnderline(
-                            child: DropdownButton<StudentAttendance>(
-                              onChanged: (StudentAttendance? value) {
+                      Obx(() {
+                        group.attendanceInfo.entries.forEach(print);
+                        return DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              onChanged: (String? value) {
                                 // NOTE: There's no reason 'value' should be a nullable string here,
                                 // but dart is complaining about a type compatibility problem so meh
                                 day.value.status = value!;
                                 day.refresh();
                               },
                               value: day.value.status,
-                              items: _attendanceStatusItems(),
+                              items: _attendanceStatusItems(group),
                             ),
-                          ))
+                          );
+                      })
                     ],
                   ),
                   const Divider(thickness: 1),
@@ -184,7 +200,7 @@ class UniformPartPointsWidget extends StatelessWidget {
           ),
           Obx(() {
             final bool isPresent =
-                StudentAttendanceExt.isPresent(day.value.status);
+                AttendanceHelper.isPresent(day.value.status);
             if (!isPresent || !day.value.uniform.containsKey(uniformPart))
               day.value.uniform[uniformPart] = 0;
 

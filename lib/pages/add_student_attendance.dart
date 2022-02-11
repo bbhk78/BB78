@@ -29,7 +29,7 @@ class AddStudentAttendance extends GetWidget<UserController> {
 
     final int numStudentsRecorded = todayRollcall.values
         .where((StudentAttendanceDay day) =>
-            day.status != StudentAttendance.unknown)
+            day.status != UNKNOWN_ATTENDANCE)
         .length;
     final bool isUpdating = numStudentsRecorded != 0;
 
@@ -99,7 +99,7 @@ class AddStudentAttendance extends GetWidget<UserController> {
             onPressed: () async {
               final bool isValid = todayRollcall.values
                   .where((StudentAttendanceDay day) =>
-                      day.status == StudentAttendance.unknown)
+                      day.status == UNKNOWN_ATTENDANCE)
                   .isEmpty;
 
               if (!isValid) {
@@ -173,12 +173,12 @@ class StudentAttendanceRowWidget extends StatelessWidget {
             child: Obx(() => Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: STATUS_COLORS[day.value.status.name],
+                    color: STATUS_COLORS[day.value.status],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(5),
                     child: Text(
-                      day.value.status.name.tr,
+                      day.value.status.tr,
                       style: const TextStyle(fontSize: 15),
                       textAlign: TextAlign.center,
                     ),

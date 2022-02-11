@@ -150,7 +150,7 @@ class UserController extends GetxController {
       ..removeWhere((Student student, StudentAttendanceDay day) =>
           !day.date.toDate().isToday())
       ..removeWhere((Student student, StudentAttendanceDay day) =>
-          day.status == StudentAttendance.unknown)
+          day.status == UNKNOWN_ATTENDANCE)
       ..forEach((Student student, StudentAttendanceDay day) {
         final int possibleTodayIndex = student.attendance.calendar.indexWhere(
             (StudentAttendanceDay day) => day.date.toDate().isToday());

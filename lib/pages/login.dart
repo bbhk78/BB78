@@ -11,7 +11,7 @@ import 'package:boysbrigade/utils.dart';
 import 'package:boysbrigade/pages/signup.dart';
 
 // TODO: PLEASE REMOVE ME WHEN DONE
-const bool TMP_DEBUG_FLAG = false;
+const bool TMP_DEBUG_FLAG = true;
 
 class Login extends GetWidget<AuthController> {
   Login({Key? key}) : super(key: key);

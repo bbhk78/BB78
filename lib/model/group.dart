@@ -10,6 +10,7 @@ class Group extends Equatable {
   final String name;
   final List<String> subGroupIds;
   final List<String> uniformClass;
+  final Map<String, int> attendanceInfo;
   final List<String> teacherIds;
   final int sortOrder;
   final Color tileColor;
@@ -19,6 +20,7 @@ class Group extends Equatable {
     required this.name,
     required this.subGroupIds,
     required this.uniformClass,
+    required this.attendanceInfo,
     required this.teacherIds,
     required this.sortOrder,
     required this.tileColor,
@@ -28,6 +30,7 @@ class Group extends Equatable {
         'name': name,
         'sub-groups': subGroupIds,
         'uniform-class': uniformClass,
+        'attendance-info': attendanceInfo,
         'teachers': teacherIds,
         'sort-order': sortOrder,
         'tile-color': tileColor.toString(),
@@ -40,6 +43,8 @@ class Group extends Equatable {
             TypeUtils.parseList<String>(document.data()!['sub-groups']),
         uniformClass =
             TypeUtils.parseList<String>(document.data()!['uniform-class']),
+        attendanceInfo =
+            TypeUtils.parseHashMap<String, int>(document.data()!['attendance-info']),
         teacherIds = TypeUtils.parseList<String>(document.data()!['teachers']),
         sortOrder = document.data()!['sort-order'] as int,
         tileColor = Color(int.parse((document.data()!['tile-color'] as String)
