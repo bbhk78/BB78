@@ -71,6 +71,6 @@ const LocaleBundle ZH_TW_BUNDLE = LocaleBundle(
       'update': '更新',
       'add new student': '新增隊員',
       'remove existing student': '您確定是否要移除此隊員？',
-      'nn': '無需',
+      'nn': '網課',
       'signup': '註冊',
     });
