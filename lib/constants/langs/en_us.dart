@@ -47,7 +47,7 @@ const LocaleBundle EN_US_BUNDLE = LocaleBundle(
       'language': 'Language',
       'logout': 'Logout',
       'about app description':
-          'As a CS14 member, I understand the struggle of not playing basketball but to count the number of participants and collect notice after the company section is dismissed. I hope to create a better afternoon.',
+          'As an active CS14 member, I understand the struggle of not playing basketball but to count the number of participants and collect notice after the company section is dismissed. I hope to create a better afternoon.',
       'about app title': "Introducing Melanie Hsieh's masterpiece: BB78 App",
       'chinese': 'Chinese',
       'english': 'English',

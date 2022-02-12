@@ -9,13 +9,21 @@ const String PE_ATTENDANCE = 'pe';
 
 class AttendanceHelper {
   static bool isPresent(String status) => <String>[
-    'present', 'late', 'early', 'late return',
-    'early leave', 'personal leave', 'sick leave'
-  ].contains(status);
+        'present',
+        'late',
+        'early',
+        'late return',
+        'early leave',
+      ].contains(status);
 
   static bool isExcused(String status) => <String>[
-    UNKNOWN_ATTENDANCE, PE_ATTENDANCE, 'nn',
-  ].contains(status);
+        UNKNOWN_ATTENDANCE,
+        PE_ATTENDANCE,
+        'nn',
+        'personal leave',
+        'sick leave',
+        'sick',
+      ].contains(status);
 }
 
 // enum StudentAttendance { unknown, present, late, sick, absent, pe, nn }
